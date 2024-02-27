@@ -1,0 +1,16 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "webgame-api docs",
+        "title": "webgame-api",
+        "contact": {
+            "name": "webgamedevelop",
+            "url": "http://www.swagger.io/support",
+            "email": "webgamedevelop@163.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {}
+}

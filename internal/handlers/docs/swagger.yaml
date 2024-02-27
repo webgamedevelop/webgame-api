@@ -1,0 +1,12 @@
+basePath: /api
+host: localhost:8080
+info:
+  contact:
+    email: webgamedevelop@163.com
+    name: webgamedevelop
+    url: http://www.swagger.io/support
+  description: webgame-api docs
+  title: webgame-api
+  version: "1.0"
+paths: {}
+swagger: "2.0"
