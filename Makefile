@@ -1,6 +1,7 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= webgamedevelop/webgame-api:v0.0.1-alpha.2
+TAG ?= $(shell git describe --abbrev=0 --tags)
+IMG ?= webgamedevelop/webgame-api:$(TAG)
 LDFLAGS ?= $(shell hack/lib/version.sh) -X 'k8s.io/component-base/version/verflag.programName=webgame-api'
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
