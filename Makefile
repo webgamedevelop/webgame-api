@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= webgamedevelop/webgame-api:v0.0.1-alpha.1
+IMG ?= webgamedevelop/webgame-api:v0.0.1-alpha.2
 LDFLAGS ?= $(shell hack/lib/version.sh) -X 'k8s.io/component-base/version/verflag.programName=webgame-api'
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
@@ -91,7 +91,7 @@ run: fmt swagger vet ## Run a controller from your host.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
 docker-build: fmt swagger vet ## Build docker image with the manager.
-	$(CONTAINER_TOOL) build -t ${IMG} .
+	$(CONTAINER_TOOL) build --build-arg LDFLAGS="-s -w $(LDFLAGS)" -t ${IMG} .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -110,7 +110,7 @@ docker-buildx: fmt swagger vet ## Build and push docker image for the manager fo
 	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' Dockerfile > Dockerfile.cross
 	- $(CONTAINER_TOOL) buildx create --name project-v3-builder
 	$(CONTAINER_TOOL) buildx use project-v3-builder
-	- $(CONTAINER_TOOL) buildx build --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
+	- $(CONTAINER_TOOL) buildx build --build-arg LDFLAGS="-s -w $(LDFLAGS)" --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
 	- $(CONTAINER_TOOL) buildx rm project-v3-builder
 	 rm Dockerfile.cross
 
