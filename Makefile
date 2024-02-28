@@ -4,6 +4,8 @@ TAG ?= $(shell git describe --abbrev=0 --tags)
 IMG ?= webgamedevelop/webgame-api:$(TAG)
 LDFLAGS ?= $(shell hack/lib/version.sh) -X 'k8s.io/component-base/version/verflag.programName=webgame-api'
 
+ENVTEST_K8S_VERSION = 1.28.0
+
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
 GOBIN=$(shell go env GOPATH)/bin
@@ -58,8 +60,8 @@ vet: ## Run go vet against code.
 	go vet ./...
 
 .PHONY: test
-test: fmt vet ## Run tests.
-	go test ./... -coverprofile cover.out
+test: fmt vet envtest ## Run tests.
+	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) --bin-dir $(LOCALBIN) -p path)" go test ./... -coverprofile cover.out
 
 GOLANGCI_LINT = $(shell pwd)/bin/golangci-lint
 GOLANGCI_LINT_VERSION ?= v1.54.2
@@ -133,6 +135,7 @@ $(LOCALBIN):
 	@mkdir -p $(LOCALBIN)
 
 ## Tool Binaries
+ENVTEST ?= $(LOCALBIN)/setup-envtest
 SWAG ?= $(LOCALBIN)/swag
 HELM ?= $(LOCALBIN)/helm
 
@@ -140,11 +143,17 @@ HELM ?= $(LOCALBIN)/helm
 SWAG_VERSION ?= v1.16.2
 HELM_VERSION ?= v3.14.2
 
+.PHONY: envtest
+envtest: $(ENVTEST) ## Download envtest-setup locally if necessary.
+$(ENVTEST): $(LOCALBIN)
+	test -s $(ENVTEST) || GOBIN=$(LOCALBIN) go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
+
 .PHONY: swag
 swag: $(SWAG) ## Download swag locally if necessary.
 $(SWAG): $(LOCALBIN)
-	@test -s $(SWAG) || GOBIN=$(LOCALBIN) go install github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION)
+	test -s $(SWAG) || GOBIN=$(LOCALBIN) go install github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION)
 
+.PHONY: helm
 helm: $(HELM) ## Download helm locally if necessary.
 $(HELM): $(LOCALBIN)
 	test -s $(HELM) || GOBIN=$(LOCALBIN) go install helm.sh/helm/v3/cmd/helm@$(HELM_VERSION)
