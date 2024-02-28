@@ -80,22 +80,22 @@ lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes.
 ##@ Build
 
 .PHONY: build
-build: fmt swagger vet ## Build manager binary.
+build: fmt swagger vet ## Build webgame-api binary.
 	go build --ldflags "$(LDFLAGS)" -o bin/webgame-api cmd/main.go
 
 .PHONY: run
-run: fmt swagger vet ## Run a controller from your host.
+run: fmt swagger vet ## Run a webgame-api from your host.
 	go run ./cmd/main.go
 
 # If you wish to build the manager image targeting other platforms you can use the --platform flag.
 # (i.e. docker build --platform linux/arm64). However, you must enable docker buildKit for it.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
-docker-build: fmt swagger vet ## Build docker image with the manager.
+docker-build: fmt swagger vet ## Build docker image with the webgame-api.
 	$(CONTAINER_TOOL) build --build-arg LDFLAGS="-s -w $(LDFLAGS)" -t ${IMG} .
 
 .PHONY: docker-push
-docker-push: ## Push docker image with the manager.
+docker-push: ## Push docker image with the webgame-api.
 	$(CONTAINER_TOOL) push ${IMG}
 
 # PLATFORMS defines the target platforms for the manager image be built to provide support to multiple
@@ -106,7 +106,7 @@ docker-push: ## Push docker image with the manager.
 # To adequately provide solutions that are compatible with multiple platforms, you should consider using this option.
 PLATFORMS ?= linux/arm64,linux/amd64
 .PHONY: docker-buildx
-docker-buildx: fmt swagger vet ## Build and push docker image for the manager for cross-platform support.
+docker-buildx: fmt swagger vet ## Build and push docker image for the webgame-api for cross-platform support.
 	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
 	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' Dockerfile > Dockerfile.cross
 	- $(CONTAINER_TOOL) buildx create --name project-v3-builder
@@ -114,6 +114,16 @@ docker-buildx: fmt swagger vet ## Build and push docker image for the manager fo
 	- $(CONTAINER_TOOL) buildx build --build-arg LDFLAGS="-s -w $(LDFLAGS)" --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
 	- $(CONTAINER_TOOL) buildx rm project-v3-builder
 	 rm Dockerfile.cross
+
+##@ Deployment
+
+.PHONY: deploy
+deploy: helm ## Deploy webgame-api component by helm to the K8s cluster specified in ~/.kube/config.
+	$(HELM) -n webgame-system upgrade --install --create-namespace webgame-api helm --set image.image=$(IMG)
+
+.PHONY: undeploy
+undeploy: helm ## Undeploy webgame-api component by helm from the K8s cluster specified in ~/.kube/config.
+	$(HELM) -n webgame-system uninstall webgame-api
 
 ##@ Build Dependencies
 
