@@ -21,6 +21,9 @@ import (
 	"github.com/spf13/pflag"
 	swaggofiles "github.com/swaggo/files"
 	ginswagger "github.com/swaggo/gin-swagger"
+	"k8s.io/apimachinery/pkg/runtime"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
+	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	cliflag "k8s.io/component-base/cli/flag"
 	"k8s.io/component-base/cli/globalflag"
@@ -29,11 +32,19 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/webgamedevelop/logger"
+	webgamev1 "github.com/webgamedevelop/webgame/api/v1"
 
 	"github.com/webgamedevelop/webgame-api/internal/handlers/docs"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/healthz"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/metrics"
 )
+
+var scheme = runtime.NewScheme()
+
+func init() {
+	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
+	utilruntime.Must(webgamev1.AddToScheme(scheme))
+}
 
 func main() {
 	var apiAddr string
@@ -53,9 +64,16 @@ func main() {
 		return
 	}
 
+	// --version / --version=raw
 	verflag.PrintAndExitIfRequested()
 
+	cfg := ctrl.GetConfigOrDie()
+	_ = cfg
+
 	ctx := ctrl.SetupSignalHandler()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	setLogger(ctx)
 	defer klog.Flush()
 
