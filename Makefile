@@ -49,7 +49,7 @@ fmt: ## Run go fmt against code.
 	go fmt ./...
 
 .PHONY: swagger
-swagger: swag ## Generate swagger file and format swag comments
+swagger: swag ## Generate swagger file and format swag comments.
 	$(SWAG) fmt --dir cmd --generalInfo main.go
 	$(SWAG) init --dir cmd --output internal/handlers/docs --generalInfo main.go
 
@@ -70,11 +70,11 @@ golangci-lint:
 	}
 
 .PHONY: lint
-lint: golangci-lint ## Run golangci-lint linter & yamllint
+lint: golangci-lint ## Run golangci-lint linter & yamllint.
 	$(GOLANGCI_LINT) run
 
 .PHONY: lint-fix
-lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes
+lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes.
 	$(GOLANGCI_LINT) run --fix
 
 ##@ Build
@@ -106,7 +106,7 @@ docker-push: ## Push docker image with the manager.
 # To adequately provide solutions that are compatible with multiple platforms, you should consider using this option.
 PLATFORMS ?= linux/arm64,linux/amd64
 .PHONY: docker-buildx
-docker-buildx: fmt swagger vet ## Build and push docker image for the manager for cross-platform support
+docker-buildx: fmt swagger vet ## Build and push docker image for the manager for cross-platform support.
 	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
 	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' Dockerfile > Dockerfile.cross
 	- $(CONTAINER_TOOL) buildx create --name project-v3-builder
@@ -124,11 +124,17 @@ $(LOCALBIN):
 
 ## Tool Binaries
 SWAG ?= $(LOCALBIN)/swag
+HELM ?= $(LOCALBIN)/helm
 
 ## Tool Versions
 SWAG_VERSION ?= v1.16.2
+HELM_VERSION ?= v3.14.2
 
 .PHONY: swag
 swag: $(SWAG) ## Download swag locally if necessary.
 $(SWAG): $(LOCALBIN)
-	@test -s $(LOCALBIN)/swag || GOBIN=$(LOCALBIN) go install github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION)
+	@test -s $(SWAG) || GOBIN=$(LOCALBIN) go install github.com/swaggo/swag/cmd/swag@$(SWAG_VERSION)
+
+helm: $(HELM) ## Download helm locally if necessary.
+$(HELM): $(LOCALBIN)
+	test -s $(HELM) || GOBIN=$(LOCALBIN) go install helm.sh/helm/v3/cmd/helm@$(HELM_VERSION)
