@@ -30,6 +30,7 @@ import (
 	"k8s.io/component-base/version/verflag"
 	"k8s.io/klog/v2"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/webgamedevelop/logger"
 	webgamev1 "github.com/webgamedevelop/webgame/api/v1"
@@ -37,6 +38,7 @@ import (
 	"github.com/webgamedevelop/webgame-api/internal/handlers/docs"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/healthz"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/metrics"
+	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
 )
 
 var scheme = runtime.NewScheme()
@@ -67,9 +69,6 @@ func main() {
 	// --version / --version=raw
 	verflag.PrintAndExitIfRequested()
 
-	cfg := ctrl.GetConfigOrDie()
-	_ = cfg
-
 	ctx := ctrl.SetupSignalHandler()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -77,6 +76,12 @@ func main() {
 	setLogger(ctx)
 	defer klog.Flush()
 
+	if err := pkgclient.Init(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme}); err != nil {
+		klog.Error(err)
+		return
+	}
+
+	// create http router
 	router := gin.Default()
 
 	// TODO
