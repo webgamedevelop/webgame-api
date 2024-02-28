@@ -21,6 +21,7 @@ import (
 	"github.com/spf13/pflag"
 	swaggofiles "github.com/swaggo/files"
 	ginswagger "github.com/swaggo/gin-swagger"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	cliflag "k8s.io/component-base/cli/flag"
 	"k8s.io/component-base/cli/globalflag"
 	"k8s.io/component-base/version/verflag"
