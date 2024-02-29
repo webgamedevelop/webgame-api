@@ -38,6 +38,7 @@ import (
 	"github.com/webgamedevelop/webgame-api/internal/handlers/docs"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/healthz"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/metrics"
+	"github.com/webgamedevelop/webgame-api/internal/models"
 	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
 )
 
@@ -58,6 +59,7 @@ func main() {
 	verflag.AddFlags(&versionFlag)
 	globalflag.AddGlobalFlags(pflag.CommandLine, "webgame-api")
 	logger.InitFlags(flag.CommandLine)
+	models.InitFlags(flag.CommandLine)
 	pflag.CommandLine.ParseErrorsWhitelist.UnknownFlags = true
 	cliflag.InitFlags()
 
@@ -75,6 +77,16 @@ func main() {
 
 	setLogger(ctx)
 	defer klog.Flush()
+
+	if err := models.Init(); err != nil {
+		klog.Error(err)
+		return
+	}
+
+	if err := models.Migrate(); err != nil {
+		klog.Error(err)
+		return
+	}
 
 	if err := pkgclient.Init(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme}); err != nil {
 		klog.Error(err)
