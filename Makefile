@@ -123,6 +123,7 @@ docker-buildx: fmt swagger vet ## Build and push docker image for the webgame-ap
 deploy: helm ## Deploy webgame-api component by helm to the K8s cluster specified in ~/.kube/config.
 	$(HELM) -n webgame-system upgrade --install --create-namespace webgame-api helm \
 	    --set image.image="$(IMG)" \
+	    --set log.level=2 \
 	    --set database.address="mysql.mysql" \
 	    --set database.port="3306" \
 	    --set database.user="root" \
