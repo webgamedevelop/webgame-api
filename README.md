@@ -9,7 +9,8 @@ webgame api component
 - go version v1.20.0+
 - docker version 17.03+.
 - kubectl version v1.11.3+.
-- helm v3+
+- helm version v3+
+- mysql version 5.7.x
 
 ### To Deploy on the cluster
 **Build and push your image to the location specified by `IMG`:**
