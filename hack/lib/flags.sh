@@ -202,4 +202,51 @@ function kube::version::ldflags() {
   echo "${ldflags[*]-}"
 }
 
-kube::version::ldflags
+function usage {
+    echo "Usage: $0 [subcommand]"
+    echo "  ${BASH_SOURCE[0]} version, print version"
+    echo "  ${BASH_SOURCE[0]} flags, print ldflags"
+}
+
+function usage() {
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    echo "  -h, --help     print this help"
+    echo "  -l, --ldflags  print ldflags"
+    echo "  -v, --version  print version"
+}
+
+function main() {
+    if [ $# -eq 0 ]; then
+        usage
+        exit 1
+    fi
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -v|--version)
+                kube::version::get_version_vars
+                echo ${KUBE_GIT_VERSION} | sed 's/+/-/g'
+                exit 0
+                ;;
+            -l|--ldflags)
+                kube::version::ldflags
+                exit 0
+                ;;
+            *)
+                echo "Invalid option: $1"
+                usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
+    exit 0
+}
+
+main "$@"

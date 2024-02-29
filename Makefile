@@ -1,8 +1,8 @@
 
 # Image URL to use all building/pushing image targets
-TAG ?= $(shell git describe --abbrev=0 --tags)
+TAG ?= $(shell hack/lib/flags.sh --version)
 IMG ?= webgamedevelop/webgame-api:$(TAG)
-LDFLAGS ?= $(shell hack/lib/version.sh) -X 'k8s.io/component-base/version/verflag.programName=webgame-api'
+LDFLAGS ?= $(shell hack/lib/flags.sh --ldflags) -X 'k8s.io/component-base/version/verflag.programName=webgame-api'
 
 ENVTEST_K8S_VERSION = 1.28.0
 
