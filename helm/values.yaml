@@ -7,7 +7,10 @@ database:
   password: 123456
 
 log:
+  ginMode: release
+  levelEnabler: 0
   level: 2
+  inspectLevel: 2
 
 image:
   image: webgamedevelop/webgame-api:latest

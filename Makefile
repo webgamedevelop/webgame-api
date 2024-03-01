@@ -83,11 +83,27 @@ lint-fix: golangci-lint ## Run golangci-lint linter and perform fixes.
 
 .PHONY: build
 build: fmt swagger vet ## Build webgame-api binary.
-	go build --ldflags "$(LDFLAGS)" -o bin/webgame-api cmd/main.go
+	go build --ldflags "$(LDFLAGS)" -o $(LOCALBIN)/webgame-api cmd/main.go
 
 .PHONY: run
 run: fmt swagger vet ## Run a webgame-api from your host.
-	go run ./cmd/main.go
+	go run ./cmd/main.go \
+	    --database-address localhost \
+	    --database-password 123456 \
+	    --gin-mode debug \
+	    --logger-level-enabler 0 \
+	    --v 2 \
+	    --middleware-inspect-level 2
+
+.PHONY: run-bin
+run-bin: build
+	$(LOCALBIN)/webgame-api \
+	    --database-address localhost \
+	    --database-password 123456 \
+	    --gin-mode debug \
+	    --logger-level-enabler 0 \
+	    --v 2 \
+	    --middleware-inspect-level 2
 
 # If you wish to build the manager image targeting other platforms you can use the --platform flag.
 # (i.e. docker build --platform linux/arm64). However, you must enable docker buildKit for it.
@@ -123,7 +139,10 @@ docker-buildx: fmt swagger vet ## Build and push docker image for the webgame-ap
 deploy: helm ## Deploy webgame-api component by helm to the K8s cluster specified in ~/.kube/config.
 	$(HELM) -n webgame-system upgrade --install --create-namespace webgame-api helm \
 	    --set image.image="$(IMG)" \
+	    --set log.ginMode="debug" \
+	    --set log.levelEnabler=0 \
 	    --set log.level=2 \
+        --set log.inspectLevel=2 \
 	    --set database.address="mysql.mysql" \
 	    --set database.port="3306" \
 	    --set database.user="root" \

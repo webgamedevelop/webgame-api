@@ -38,6 +38,7 @@ import (
 	"github.com/webgamedevelop/webgame-api/internal/handlers/docs"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/healthz"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/metrics"
+	"github.com/webgamedevelop/webgame-api/internal/handlers/middleware"
 	"github.com/webgamedevelop/webgame-api/internal/models"
 	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
 )
@@ -62,6 +63,7 @@ func main() {
 	globalflag.AddGlobalFlags(pflag.CommandLine, "webgame-api")
 	logger.InitFlags(flag.CommandLine)
 	models.InitFlags(flag.CommandLine)
+	middleware.InitFlags(flag.CommandLine)
 	pflag.CommandLine.ParseErrorsWhitelist.UnknownFlags = true
 	cliflag.InitFlags()
 
@@ -107,7 +109,7 @@ func main() {
 
 	router.Use(cors.Default())
 	router.Use(gin.BasicAuth(map[string]string{"admin": "admin12345"}))
-	// TODO InspectRequest middleware
+	router.Use(middleware.InspectRequest())
 
 	docs.SwaggerInfo.Host = swagHost
 	router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
