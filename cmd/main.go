@@ -52,8 +52,10 @@ func init() {
 func main() {
 	var apiAddr string
 	var swagHost string
+	var ginMode string
 	pflag.StringVar(&apiAddr, "api-bind-address", ":8080", "The address the api endpoint binds to.")
-	pflag.StringVar(&swagHost, "swag-host", "localhost:8080", "swagger host")
+	pflag.StringVar(&swagHost, "swag-host", "localhost:8080", "Swagger host.")
+	pflag.StringVar(&ginMode, "gin-mode", "release", "Gin mode, debug, release or test")
 
 	var versionFlag pflag.FlagSet
 	verflag.AddFlags(&versionFlag)
@@ -75,7 +77,7 @@ func main() {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	setLogger(ctx)
+	setLogger(ctx, ginMode)
 	defer klog.Flush()
 
 	if err := models.Init(); err != nil {
@@ -139,7 +141,11 @@ func main() {
 	klog.Info("the Webgame-API HTTP server has shutdown normally")
 }
 
-func setLogger(ctx context.Context) {
+func setLogger(ctx context.Context, mode string) {
 	l, flush := logger.New(ctx, logger.DefaultEncoderConfig)
 	klog.SetLoggerWithOptions(l, klog.FlushLogger(flush))
+	ctrl.SetLogger(l)
+	gin.SetMode(mode)
+	gin.DefaultWriter = logger.Writer()
+	gin.DefaultErrorWriter = logger.Writer()
 }

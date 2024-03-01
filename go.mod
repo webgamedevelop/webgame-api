@@ -11,7 +11,7 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.2
-	github.com/webgamedevelop/logger v1.1.0
+	github.com/webgamedevelop/logger v1.1.1
 	github.com/webgamedevelop/webgame v1.0.1
 	gorm.io/datatypes v1.2.0
 	gorm.io/driver/mysql v1.5.4

@@ -187,8 +187,8 @@ github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
 github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
-github.com/webgamedevelop/logger v1.1.0 h1:DEzZz9pwXTHyEacr+L9ro5/iU5TP5/gn4hLndU7Q0ZQ=
-github.com/webgamedevelop/logger v1.1.0/go.mod h1:EUN2/LEU+sdoUrDmYFu6U2D/0CocTDGwbRw/30UDqfw=
+github.com/webgamedevelop/logger v1.1.1 h1:JNEQ7PEUgzsAznNCxm/lslft9C7tVRlA8Nhvk1BgG0Q=
+github.com/webgamedevelop/logger v1.1.1/go.mod h1:EUN2/LEU+sdoUrDmYFu6U2D/0CocTDGwbRw/30UDqfw=
 github.com/webgamedevelop/webgame v1.0.1 h1:i5MTiGj2qlBKRLHebB0iTGBI5tBKwQdoKlHnYhjD+Xk=
 github.com/webgamedevelop/webgame v1.0.1/go.mod h1:2UvGM0DQAFyP8vFhw0Gfn5OU3jqv/+HOaFey11uEEMY=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
