@@ -1,7 +1,7 @@
 # webgame-api
 <p>
   简体中文 |
-  <a href="./README_zh.md">Docs</a>
+  <a href="./README.md">Docs</a>
 </p>
 
 ## 组件描述
