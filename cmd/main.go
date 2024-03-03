@@ -21,6 +21,7 @@ import (
 	"github.com/spf13/pflag"
 	swaggofiles "github.com/swaggo/files"
 	ginswagger "github.com/swaggo/gin-swagger"
+	_ "go.uber.org/automaxprocs"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -100,10 +101,6 @@ func main() {
 	// create http router
 	router := gin.Default()
 
-	// TODO
-	//  log middleware
-	//  recover middleware
-	//  tracing route
 	router.GET("/metrics", metrics.Metrics)
 	router.GET("/healthz", healthz.Healthz)
 
