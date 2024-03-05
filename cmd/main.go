@@ -70,9 +70,6 @@ func main() {
 	verflag.PrintAndExitIfRequested()
 
 	ctx := ctrl.SetupSignalHandler()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
 	setLogger(ctx, ginMode)
 	defer klog.Flush()
 
