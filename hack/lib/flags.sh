@@ -202,12 +202,6 @@ function kube::version::ldflags() {
   echo "${ldflags[*]-}"
 }
 
-function usage {
-    echo "Usage: $0 [subcommand]"
-    echo "  ${BASH_SOURCE[0]} version, print version"
-    echo "  ${BASH_SOURCE[0]} flags, print ldflags"
-}
-
 function usage() {
     echo "Usage: $0 [options]"
     echo
