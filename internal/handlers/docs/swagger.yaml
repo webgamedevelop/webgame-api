@@ -7,6 +7,6 @@ info:
     url: http://www.swagger.io/support
   description: webgame-api docs
   title: webgame-api
-  version: "1.0"
+  version: v1
 paths: {}
 swagger: "2.0"

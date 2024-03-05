@@ -1,12 +1,3 @@
-//	@title			webgame-api
-//	@version		1.0
-//	@description	webgame-api docs
-//	@contact.name	webgamedevelop
-//	@contact.email	webgamedevelop@163.com
-//	@contact.url	http://www.swagger.io/support
-//	@host			localhost:8080
-//	@BasePath		/api
-
 package main
 
 import (
@@ -36,6 +27,8 @@ import (
 	"github.com/webgamedevelop/logger"
 	webgamev1 "github.com/webgamedevelop/webgame/api/v1"
 
+	"github.com/webgamedevelop/webgame-api/internal/handlers/api"
+	apiv1 "github.com/webgamedevelop/webgame-api/internal/handlers/api/v1"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/docs"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/healthz"
 	"github.com/webgamedevelop/webgame-api/internal/handlers/metrics"
@@ -100,18 +93,26 @@ func main() {
 
 	// create http router
 	router := gin.Default()
+	router.Use(cors.Default())
 
+	// add metrics and healthz handlers
 	router.GET("/metrics", metrics.Metrics)
 	router.GET("/healthz", healthz.Healthz)
 
-	router.Use(cors.Default())
+	// TODO replace with token middleware
 	router.Use(gin.BasicAuth(map[string]string{"admin": "admin12345"}))
-	router.Use(middleware.InspectRequest())
 
 	docs.SwaggerInfo.Host = swagHost
 	router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
 
-	// TODO add handlers here
+	apiRouter := router.Group("/api")
+	apiRouterV1 := apiRouter.Group("/v1")
+
+	api.AttachUserAPI(apiRouterV1, &apiv1.User{})
+
+	// add inspect request middleware for webgame apis
+	apiRouterV1.Use(middleware.InspectRequest())
+	api.AttachWebgameAPI(apiRouterV1, &apiv1.Webgame{})
 
 	srv := http.Server{
 		Addr:    apiAddr,
