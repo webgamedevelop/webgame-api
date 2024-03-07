@@ -5,7 +5,7 @@
 //	@contact.email	webgamedevelop@163.com
 //	@contact.url	http://www.swagger.io/support
 //	@host			localhost:8080
-//	@BasePath		/api
+//	@BasePath		/api/v1
 
 package api
 
