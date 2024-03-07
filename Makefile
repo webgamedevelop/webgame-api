@@ -53,7 +53,7 @@ fmt: ## Run go fmt against code.
 .PHONY: swagger
 swagger: swag ## Generate swagger file and format swag comments.
 	$(SWAG) fmt --dir internal/handlers/api --generalInfo router.go
-	$(SWAG) init --dir internal/handlers/api --output internal/handlers/docs --generalInfo router.go
+	$(SWAG) init --parseDependency --dir internal/handlers/api --output internal/handlers/docs --generalInfo router.go
 
 .PHONY: vet
 vet: ## Run go vet against code.
