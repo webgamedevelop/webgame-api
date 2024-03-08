@@ -1,4 +1,67 @@
-basePath: /api
+basePath: /api/v1
+definitions:
+  models.LoginUser:
+    properties:
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+      password:
+        maxLength: 16
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  models.User:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        maxLength: 50
+        type: string
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+      password:
+        maxLength: 16
+        type: string
+      phone:
+        maxLength: 13
+        minLength: 11
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - name
+    - password
+    - phone
+    type: object
+  v1.LoginFailedResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  v1.LoginResponse:
+    properties:
+      code:
+        type: integer
+      expire:
+        type: string
+      token:
+        type: string
+    type: object
+  v1.simpleResponse:
+    properties:
+      code:
+        type: integer
+      extend: {}
+      message:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -8,5 +71,81 @@ info:
   description: webgame-api docs
   title: webgame-api
   version: v1
-paths: {}
+paths:
+  /user/refresh_token:
+    get:
+      description: refresh token
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.LoginFailedResponse'
+      summary: refresh token
+      tags:
+      - user
+  /user/signin:
+    post:
+      description: sign in
+      parameters:
+      - description: login request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginUser'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.LoginFailedResponse'
+      summary: sign in
+      tags:
+      - user
+  /user/signout:
+    get:
+      description: sign out
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.LoginFailedResponse'
+      summary: sign out
+      tags:
+      - user
+  /user/signup:
+    post:
+      description: sign up
+      parameters:
+      - description: sign up request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: sign up
+      tags:
+      - user
 swagger: "2.0"

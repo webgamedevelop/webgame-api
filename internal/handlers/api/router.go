@@ -9,13 +9,18 @@
 
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/gin-gonic/gin"
+)
 
-func AttachUserAPI(group *gin.RouterGroup, user User) {
+func AttachUserAPI(group *gin.RouterGroup, user User, jwtMiddleware *jwt.GinJWTMiddleware) {
 	userAPI := group.Group("/user")
 	userAPI.POST("/signup", user.SignUp)
-	userAPI.POST("/signin", user.SignIn)
-	userAPI.POST("/signout", user.SignOut)
+	userAPI.POST("/signin", user.SignIn(jwtMiddleware))
+	userAPI.GET("/refresh_token", user.Refresh(jwtMiddleware))
+	userAPI.GET("/signout", user.SignOut(jwtMiddleware))
+	userAPI.Use(jwtMiddleware.MiddlewareFunc())
 	userAPI.POST("/update", user.Update)
 	userAPI.POST("/password", user.Password)
 }

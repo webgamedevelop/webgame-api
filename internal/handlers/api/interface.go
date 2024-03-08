@@ -1,6 +1,9 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/gin-gonic/gin"
+)
 
 type Webgame interface {
 	Create(c *gin.Context)
@@ -12,8 +15,9 @@ type Webgame interface {
 
 type User interface {
 	SignUp(c *gin.Context)
-	SignIn(c *gin.Context)
-	SignOut(c *gin.Context)
+	SignIn(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
+	Refresh(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
+	SignOut(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 	Update(c *gin.Context)
 	Password(c *gin.Context)
 }
