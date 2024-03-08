@@ -65,7 +65,7 @@ func (*User) SignUp(c *gin.Context) {
 //	@Tags			user
 //	@Summary		sign in
 //	@Description	sign in
-//	@Param			user	body		models.LoginUser	true	"login request"
+//	@Param			user	body		models.UserLoginRequest	true	"login request"
 //	@Success		200		{object}	LoginResponse
 //	@Failure		401		{object}	LoginFailedResponse
 //	@Router			/user/signin [post]
