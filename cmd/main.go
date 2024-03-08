@@ -45,12 +45,13 @@ func init() {
 }
 
 func main() {
-	var apiAddr string
-	var swagHost string
-	var ginMode string
+	var apiAddr, swagHost, ginMode, adminEmail, adminPhone, adminPassword string
 	pflag.StringVar(&apiAddr, "api-bind-address", ":8080", "The address the api endpoint binds to.")
 	pflag.StringVar(&swagHost, "swag-host", "localhost:8080", "Swagger host.")
 	pflag.StringVar(&ginMode, "gin-mode", "release", "Gin mode, debug, release or test")
+	pflag.StringVar(&adminEmail, "init-admin-email", "18600001111@139.com", "Initial email for the admin user")
+	pflag.StringVar(&adminPhone, "init-admin-phone", "18600001111", "Initial phone number for the admin user")
+	pflag.StringVar(&adminPassword, "init-admin-password", "admin12345", "Initial password for the admin user")
 
 	var versionFlag pflag.FlagSet
 	verflag.AddFlags(&versionFlag)
@@ -66,7 +67,7 @@ func main() {
 		return
 	}
 
-	// --version / --version=raw
+	// usage: --version / --version=raw
 	verflag.PrintAndExitIfRequested()
 
 	ctx := ctrl.SetupSignalHandler()
@@ -83,7 +84,18 @@ func main() {
 		return
 	}
 
+	if err := models.InitAdminUser("admin", adminEmail, adminPhone, adminPassword); err != nil {
+		klog.Error(err)
+		return
+	}
+
 	if err := pkgclient.Init(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme}); err != nil {
+		klog.Error(err)
+		return
+	}
+
+	jwtMiddleware, err := middleware.JWT()
+	if err != nil {
 		klog.Error(err)
 		return
 	}
@@ -91,24 +103,27 @@ func main() {
 	// create http router
 	router := gin.Default()
 	router.Use(cors.Default())
+	router.NoRoute(jwtMiddleware.MiddlewareFunc(), middleware.RouteNotFound)
+	router.NoMethod(jwtMiddleware.MiddlewareFunc(), middleware.MethodNotAllowed)
+
+	docs.SwaggerInfo.Host = swagHost
+	router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
 
 	// add metrics and healthz handlers
 	router.GET("/metrics", metrics.Metrics)
 	router.GET("/healthz", healthz.Healthz)
 
-	// TODO replace with token middleware
-	router.Use(gin.BasicAuth(map[string]string{"admin": "admin12345"}))
-
-	docs.SwaggerInfo.Host = swagHost
-	router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
-
 	apiRouter := router.Group("/api")
 	apiRouterV1 := apiRouter.Group("/v1")
 
-	api.AttachUserAPI(apiRouterV1, &apiv1.User{})
+	// add user api
+	api.AttachUserAPI(apiRouterV1, &apiv1.User{}, jwtMiddleware)
 
-	// add inspect request middleware for webgame apis
+	// add middlewares
+	apiRouterV1.Use(jwtMiddleware.MiddlewareFunc())
 	apiRouterV1.Use(middleware.InspectRequest())
+
+	// add webgame api
 	api.AttachWebgameAPI(apiRouterV1, &apiv1.Webgame{})
 
 	srv := http.Server{
@@ -120,6 +135,7 @@ func main() {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		// start http server
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			klog.Fatal(err)
 			return
