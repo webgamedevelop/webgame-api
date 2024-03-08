@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -17,11 +18,14 @@ func JWT() (*jwt.GinJWTMiddleware, error) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:         "webgame-api realm",
 		Key:           []byte("webgame-api secret key"),
-		Timeout:       time.Hour,
-		MaxRefresh:    time.Hour,
+		Timeout:       timeout,
+		MaxRefresh:    maxRefresh,
 		IdentityKey:   IdentityKey,
-		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
+		TokenLookup:   fmt.Sprintf("header: Authorization, query: %s, cookie: %s", cookieName, cookieName),
 		TokenHeadName: "Bearer",
+		SendCookie:    true,
+		CookieName:    cookieName,
+		CookieMaxAge:  timeout,
 		TimeFunc:      time.Now,
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginUser models.LoginUser
