@@ -56,7 +56,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.LoginUser"
+                            "$ref": "#/definitions/models.UserLoginRequest"
                         }
                     }
                 ],
@@ -135,27 +135,52 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/update": {
+            "post": {
+                "description": "update user info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "update user info",
+                "parameters": [
+                    {
+                        "description": "sign up request",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "models.LoginUser": {
-            "type": "object",
-            "required": [
-                "name",
-                "password"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 3
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 16
-                }
-            }
-        },
         "models.User": {
             "type": "object",
             "required": [
@@ -186,6 +211,24 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 13,
                     "minLength": 11
+                }
+            }
+        },
+        "models.UserLoginRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 16
                 }
             }
         },

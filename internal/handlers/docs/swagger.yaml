@@ -1,18 +1,5 @@
 basePath: /api/v1
 definitions:
-  models.LoginUser:
-    properties:
-      name:
-        maxLength: 20
-        minLength: 3
-        type: string
-      password:
-        maxLength: 16
-        type: string
-    required:
-    - name
-    - password
-    type: object
   models.User:
     properties:
       confirmPassword:
@@ -37,6 +24,19 @@ definitions:
     - name
     - password
     - phone
+    type: object
+  models.UserLoginRequest:
+    properties:
+      name:
+        maxLength: 20
+        minLength: 3
+        type: string
+      password:
+        maxLength: 16
+        type: string
+    required:
+    - name
+    - password
     type: object
   v1.LoginFailedResponse:
     properties:
@@ -96,7 +96,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.LoginUser'
+          $ref: '#/definitions/models.UserLoginRequest'
       responses:
         "200":
           description: OK
@@ -146,6 +146,34 @@ paths:
           schema:
             $ref: '#/definitions/v1.simpleResponse'
       summary: sign up
+      tags:
+      - user
+  /user/update:
+    post:
+      description: update user info
+      parameters:
+      - description: sign up request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: update user info
       tags:
       - user
 swagger: "2.0"
