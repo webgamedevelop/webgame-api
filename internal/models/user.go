@@ -6,7 +6,7 @@ import (
 	pwd "github.com/webgamedevelop/webgame-api/internal/pkg/password"
 )
 
-type LoginUser struct {
+type UserLoginRequest struct {
 	Name     string `form:"name" binding:"required,min=3,max=20" json:"name"`
 	Password string `form:"password" binding:"required,max=16" json:"password"`
 }

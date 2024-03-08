@@ -28,7 +28,7 @@ func JWT() (*jwt.GinJWTMiddleware, error) {
 		CookieMaxAge:  timeout,
 		TimeFunc:      time.Now,
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			var loginUser models.LoginUser
+			var loginUser models.UserLoginRequest
 			if err := c.ShouldBind(&loginUser); err != nil {
 				return "", errors.Join(err, jwt.ErrMissingLoginValues)
 			}
