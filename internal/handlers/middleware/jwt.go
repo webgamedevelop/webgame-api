@@ -43,6 +43,9 @@ func JWT() (*jwt.GinJWTMiddleware, error) {
 			claims := jwt.ExtractClaims(c)
 			return &models.User{Name: claims[IdentityKey].(string)}
 		},
+		LogoutResponse: func(c *gin.Context, code int) {
+			c.JSON(code, gin.H{"code": code, "message": "ok"})
+		},
 	})
 
 	if err != nil {
