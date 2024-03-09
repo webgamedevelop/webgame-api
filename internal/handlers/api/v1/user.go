@@ -11,12 +11,14 @@ import (
 	"github.com/webgamedevelop/webgame-api/internal/models"
 )
 
+// LoginResponse for swagger docs
 type LoginResponse struct {
 	Code   int    `json:"code"`
 	Expire string `json:"expire"`
 	Token  string `json:"token"`
 }
 
+// LoginFailedResponse for swagger docs
 type LoginFailedResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
