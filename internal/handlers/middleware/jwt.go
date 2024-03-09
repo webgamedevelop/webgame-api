@@ -35,17 +35,17 @@ func JWT() (*jwt.GinJWTMiddleware, error) {
 			if err := models.CompareUser(loginUser.Name, loginUser.Password); err != nil {
 				return nil, errors.Join(err, jwt.ErrFailedAuthentication)
 			}
-			return &models.User{Name: loginUser.Name}, nil
+			return &models.UserLoginRequest{Name: loginUser.Name}, nil
 		},
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*models.User); ok {
+			if v, ok := data.(*models.UserLoginRequest); ok {
 				return jwt.MapClaims{IdentityKey: v.Name}
 			}
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &models.User{Name: claims[IdentityKey].(string)}
+			return &models.UserLoginRequest{Name: claims[IdentityKey].(string)}
 		},
 		LogoutResponse: func(c *gin.Context, code int) {
 			c.JSON(code, gin.H{"code": code, "message": "ok"})

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"net/http"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -96,6 +97,63 @@ func (*User) SignOut(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 	return jwtMiddleware.LogoutHandler
 }
 
-func (*User) Update(c *gin.Context) {}
+// Update user info
+//
+//	@Tags			user
+//	@Summary		update user info
+//	@Description	update user info
+//	@Param			user	body	models.UserUpdateRequest	true	"update user info request"
+//	@Produce		json
+//	@Success		200	{object}	models.User
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/user/update [post]
+func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
+	var identityKey = jwtMiddleware.IdentityKey
+	return func(c *gin.Context) {
+		var (
+			request models.UserUpdateRequest
+			user    *models.User
+			err     error
+		)
 
-func (*User) Password(c *gin.Context) {}
+		if err = c.ShouldBindJSON(&request); err != nil {
+			klog.Error(err)
+			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+
+		username, ok := jwt.ExtractClaims(c)[identityKey]
+		if !ok {
+			err = fmt.Errorf("key `%s` not found", identityKey)
+			klog.Error(err)
+			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+
+		name, ok := username.(string)
+		if !ok {
+			err = fmt.Errorf("type assertion failed")
+			klog.Error(err)
+			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+
+		request.Name = name
+		if user, err = models.UpdateUser(&request); err != nil {
+			klog.Error(err)
+			response := Response(&simpleResponse{}, Code(http.StatusInternalServerError), Message(err.Error()))
+			c.JSON(http.StatusInternalServerError, response)
+			return
+		}
+
+		response := Response(&simpleResponse{}, Code(http.StatusOK), &ResponseExtend{Data: user})
+		c.JSON(http.StatusOK, response)
+		return
+	}
+}
+
+func (*User) ChangePassword(c *gin.Context) {}

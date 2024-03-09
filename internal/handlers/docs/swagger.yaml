@@ -38,6 +38,16 @@ definitions:
     - name
     - password
     type: object
+  models.UserUpdateRequest:
+    properties:
+      email:
+        maxLength: 50
+        type: string
+      phone:
+        maxLength: 13
+        minLength: 11
+        type: string
+    type: object
   v1.LoginFailedResponse:
     properties:
       code:
@@ -152,12 +162,12 @@ paths:
     post:
       description: update user info
       parameters:
-      - description: sign up request
+      - description: update user info request
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/models.UserUpdateRequest'
       produces:
       - application/json
       responses:

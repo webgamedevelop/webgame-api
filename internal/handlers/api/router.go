@@ -21,7 +21,7 @@ func AttachUserAPI(group *gin.RouterGroup, user User, jwtMiddleware *jwt.GinJWTM
 	userAPI.GET("/refresh_token", user.Refresh(jwtMiddleware))
 	userAPI.GET("/signout", user.SignOut(jwtMiddleware))
 	userAPI.Use(jwtMiddleware.MiddlewareFunc())
-	userAPI.POST("/update", user.Update)
+	userAPI.POST("/update", user.Update(jwtMiddleware))
 	userAPI.POST("/password", user.ChangePassword)
 }
 

@@ -148,12 +148,12 @@ const docTemplate = `{
                 "summary": "update user info",
                 "parameters": [
                     {
-                        "description": "sign up request",
+                        "description": "update user info request",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserUpdateRequest"
                         }
                     }
                 ],
@@ -229,6 +229,20 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "maxLength": 16
+                }
+            }
+        },
+        "models.UserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 13,
+                    "minLength": 11
                 }
             }
         },
