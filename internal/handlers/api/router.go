@@ -22,7 +22,7 @@ func AttachUserAPI(group *gin.RouterGroup, user User, jwtMiddleware *jwt.GinJWTM
 	userAPI.GET("/signout", user.SignOut(jwtMiddleware))
 	userAPI.Use(jwtMiddleware.MiddlewareFunc())
 	userAPI.POST("/update", user.Update)
-	userAPI.POST("/password", user.Password)
+	userAPI.POST("/password", user.ChangePassword)
 }
 
 func AttachWebgameAPI(group *gin.RouterGroup, webgame Webgame) {
