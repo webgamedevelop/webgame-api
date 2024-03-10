@@ -19,5 +19,5 @@ type User interface {
 	Refresh(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 	SignOut(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 	Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
-	ChangePassword(c *gin.Context)
+	ChangePassword(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 }

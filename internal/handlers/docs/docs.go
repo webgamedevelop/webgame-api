@@ -19,6 +19,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/user/password": {
+            "post": {
+                "description": "change password",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "change password",
+                "parameters": [
+                    {
+                        "description": "change password request",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.LoginFailedResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/refresh_token": {
             "get": {
                 "description": "refresh token",
@@ -211,6 +254,22 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 13,
                     "minLength": 11
+                }
+            }
+        },
+        "models.UserChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "confirmPassword",
+                "password"
+            ],
+            "properties": {
+                "confirmPassword": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 16
                 }
             }
         },

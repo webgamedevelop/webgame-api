@@ -25,6 +25,17 @@ definitions:
     - password
     - phone
     type: object
+  models.UserChangePasswordRequest:
+    properties:
+      confirmPassword:
+        type: string
+      password:
+        maxLength: 16
+        type: string
+    required:
+    - confirmPassword
+    - password
+    type: object
   models.UserLoginRequest:
     properties:
       name:
@@ -82,6 +93,34 @@ info:
   title: webgame-api
   version: v1
 paths:
+  /user/password:
+    post:
+      description: change password
+      parameters:
+      - description: change password request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.LoginFailedResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: change password
+      tags:
+      - user
   /user/refresh_token:
     get:
       description: refresh token

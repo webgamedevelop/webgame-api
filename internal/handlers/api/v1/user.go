@@ -6,7 +6,6 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
-	"k8s.io/klog/v2"
 
 	"github.com/webgamedevelop/webgame-api/internal/models"
 )
@@ -45,21 +44,16 @@ func (*User) SignUp(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindJSON(&user); err != nil {
-		klog.Error(err)
-		response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
-		c.JSON(http.StatusBadRequest, response)
+		badResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
 	if created, err = models.CreateUser(&user); err != nil {
-		klog.Error(err)
-		response := Response(&simpleResponse{}, Code(http.StatusInternalServerError), Message(err.Error()))
-		c.JSON(http.StatusInternalServerError, response)
+		badResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
-	response := Response(&simpleResponse{}, Code(http.StatusOK), &ResponseExtend{Data: created})
-	c.JSON(http.StatusOK, response)
+	okResponse(c, created)
 	return
 }
 
@@ -120,35 +114,27 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 		)
 
 		if err = c.ShouldBindJSON(&request); err != nil {
-			klog.Error(err)
-			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
-			c.JSON(http.StatusBadRequest, response)
+			badResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		username, ok := jwt.ExtractClaims(c)[identityKey]
 		if !ok {
 			err = fmt.Errorf("key `%s` not found", identityKey)
-			klog.Error(err)
-			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
-			c.JSON(http.StatusBadRequest, response)
+			badResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		name, ok := username.(string)
 		if !ok {
 			err = fmt.Errorf("type assertion failed")
-			klog.Error(err)
-			response := Response(&simpleResponse{}, Code(http.StatusBadRequest), Message(err.Error()))
-			c.JSON(http.StatusBadRequest, response)
+			badResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		request.Name = name
 		if user, err = models.UpdateUser(&request); err != nil {
-			klog.Error(err)
-			response := Response(&simpleResponse{}, Code(http.StatusInternalServerError), Message(err.Error()))
-			c.JSON(http.StatusInternalServerError, response)
+			badResponse(c, http.StatusInternalServerError, err)
 			return
 		}
 
@@ -158,4 +144,51 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 	}
 }
 
-func (*User) ChangePassword(c *gin.Context) {}
+// ChangePassword change password
+//
+//	@Tags			user
+//	@Summary		change password
+//	@Description	change password
+//	@Param			user	body	models.UserChangePasswordRequest	true	"change password request"
+//	@Produce		json
+//	@Success		200	{object}	LoginFailedResponse
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/user/password [post]
+func (*User) ChangePassword(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		var (
+			identityKey = jwtMiddleware.IdentityKey
+			request     models.UserChangePasswordRequest
+			err         error
+		)
+
+		if err = c.ShouldBindJSON(&request); err != nil {
+			badResponse(c, http.StatusBadRequest, err)
+			return
+		}
+
+		username, ok := jwt.ExtractClaims(c)[identityKey]
+		if !ok {
+			err = fmt.Errorf("key `%s` not found", identityKey)
+			badResponse(c, http.StatusBadRequest, err)
+			return
+		}
+
+		name, ok := username.(string)
+		if !ok {
+			err = fmt.Errorf("type assertion failed")
+			badResponse(c, http.StatusBadRequest, err)
+			return
+		}
+
+		request.Name = name
+		if _, err = models.ChangePassword(&request); err != nil {
+			badResponse(c, http.StatusInternalServerError, err)
+			return
+		}
+
+		jwtMiddleware.LogoutHandler(c)
+		return
+	}
+}
