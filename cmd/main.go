@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sync"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
@@ -35,6 +36,7 @@ import (
 	"github.com/webgamedevelop/webgame-api/internal/handlers/middleware"
 	"github.com/webgamedevelop/webgame-api/internal/models"
 	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
+	"github.com/webgamedevelop/webgame-api/pkg/validator"
 )
 
 var scheme = runtime.NewScheme()
@@ -74,28 +76,34 @@ func main() {
 	setLogger(ctx, ginMode)
 	defer klog.Flush()
 
-	if err := models.Init(); err != nil {
+	var err error
+	if err = models.Init(); err != nil {
 		klog.Error(err)
 		return
 	}
 
-	if err := models.Migrate(); err != nil {
+	if err = models.Migrate(); err != nil {
 		klog.Error(err)
 		return
 	}
 
-	if err := models.InitAdminUser("admin", adminEmail, adminPhone, adminPassword); err != nil {
+	if err = models.InitAdminUser("admin", adminEmail, adminPhone, adminPassword); err != nil {
 		klog.Error(err)
 		return
 	}
 
-	if err := pkgclient.Init(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme}); err != nil {
+	if err = pkgclient.Init(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme}); err != nil {
 		klog.Error(err)
 		return
 	}
 
-	jwtMiddleware, err := middleware.JWT()
-	if err != nil {
+	var jwtMiddleware *jwt.GinJWTMiddleware
+	if jwtMiddleware, err = middleware.JWT(); err != nil {
+		klog.Error(err)
+		return
+	}
+
+	if err = validator.RegisterValidation(); err != nil {
 		klog.Error(err)
 		return
 	}
