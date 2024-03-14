@@ -9,7 +9,7 @@ import (
 var (
 	address, user, password, database, charset, loc string
 	port                                            uint16
-	parseTime                                       bool
+	parseTime, debugLogLevel                        bool
 )
 
 var commandLine pflag.FlagSet
@@ -23,6 +23,7 @@ func init() {
 	commandLine.StringVar(&charset, "database-charset", "utf8", "database charset")
 	commandLine.StringVar(&loc, "database-loc", "Local", "database parameter loc")
 	commandLine.BoolVar(&parseTime, "database-parseTime", true, "database parameter parseTime")
+	commandLine.BoolVar(&debugLogLevel, "gorm-debug-log-level", false, "set gorm log level to Debug")
 }
 
 // InitFlags is for explicitly initializing the flags.
