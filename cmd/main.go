@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"net/http"
+	"os"
 	"sync"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -47,13 +48,18 @@ func init() {
 }
 
 func main() {
-	var apiAddr, swagHost, ginMode, adminEmail, adminPhone, adminPassword string
+	var (
+		apiAddr, swagHost, ginMode, adminEmail, adminPhone, adminPassword string
+		importData                                                        bool
+	)
+
 	pflag.StringVar(&apiAddr, "api-bind-address", ":8080", "The address the api endpoint binds to.")
 	pflag.StringVar(&swagHost, "swag-host", "localhost:8080", "Swagger host.")
 	pflag.StringVar(&ginMode, "gin-mode", "release", "Gin mode, debug, release or test")
 	pflag.StringVar(&adminEmail, "init-admin-email", "18600001111@139.com", "Initial email for the admin user")
 	pflag.StringVar(&adminPhone, "init-admin-phone", "18600001111", "Initial phone number for the admin user")
 	pflag.StringVar(&adminPassword, "init-admin-password", "admin12345", "Initial password for the admin user")
+	pflag.BoolVar(&importData, "import-initialization-data", false, "Import initialization data, and exit")
 
 	var versionFlag pflag.FlagSet
 	verflag.AddFlags(&versionFlag)
@@ -84,6 +90,16 @@ func main() {
 
 	if err = models.Migrate(); err != nil {
 		klog.Error(err)
+		return
+	}
+
+	// import initialization data, and exit
+	if importData {
+		if err = models.Initialize(); err != nil {
+			klog.Error(err)
+			os.Exit(1)
+		}
+		klog.Info("initialization data imported")
 		return
 	}
 
