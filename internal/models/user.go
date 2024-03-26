@@ -2,6 +2,7 @@ package models
 
 import (
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	pwd "github.com/webgamedevelop/webgame-api/internal/pkg/password"
 )
@@ -40,10 +41,15 @@ func clearPassword(u *User) {
 }
 
 func InitAdminUser(username, email, phone, password string) error {
-	hashed, err := pwd.Generate([]byte(password))
-	if err != nil {
+	var (
+		hashed []byte
+		err    error
+	)
+
+	if hashed, err = pwd.Generate([]byte(password)); err != nil {
 		return err
 	}
+
 	user := &User{
 		Name:     username,
 		Email:    email,
@@ -51,9 +57,33 @@ func InitAdminUser(username, email, phone, password string) error {
 		Password: string(hashed),
 		Init:     true,
 	}
-	if err := db.FirstOrCreate(user, &User{Name: username}).Error; err != nil {
+
+	tx := db.Begin()
+
+	// rollback when panic or err
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			return
+		}
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+	}()
+
+	if err = tx.Error; err != nil {
 		return err
 	}
+
+	if err = tx.Clauses(clause.OnConflict{DoNothing: true}).Create(user).Error; err != nil {
+		return err
+	}
+
+	if err = tx.Commit().Error; err != nil {
+		return err
+	}
+
 	return nil
 }
 
