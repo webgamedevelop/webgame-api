@@ -21,3 +21,11 @@ type User interface {
 	Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 	ChangePassword(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context)
 }
+
+type Resource interface {
+	Create(c *gin.Context)
+	Update(c *gin.Context)
+	List(c *gin.Context)
+	Detail(c *gin.Context)
+	Delete(c *gin.Context)
+}

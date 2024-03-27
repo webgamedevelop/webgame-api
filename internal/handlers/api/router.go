@@ -25,6 +25,15 @@ func AttachUserAPI(group *gin.RouterGroup, user User, jwtMiddleware *jwt.GinJWTM
 	userAPI.POST("/password", user.ChangePassword(jwtMiddleware))
 }
 
+func AttachSecretAPI(group *gin.RouterGroup, secret Resource) {
+	secretAPI := group.Group("/secret")
+	secretAPI.POST("/create", secret.Create)
+	secretAPI.POST("/update", secret.Update)
+	secretAPI.GET("/list", secret.List)
+	secretAPI.GET("/detail", secret.Detail)
+	secretAPI.DELETE("/delete", secret.Delete)
+}
+
 func AttachWebgameAPI(group *gin.RouterGroup, webgame Webgame) {
 	webgameAPI := group.Group("/webgame")
 	webgameAPI.POST("/create", webgame.Create)

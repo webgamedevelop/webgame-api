@@ -148,6 +148,7 @@ func main() {
 	apiRouterV1.Use(middleware.InspectRequest())
 
 	// add webgame api
+	api.AttachSecretAPI(apiRouterV1, &apiv1.Secret{})
 	api.AttachWebgameAPI(apiRouterV1, &apiv1.Webgame{})
 
 	srv := http.Server{
