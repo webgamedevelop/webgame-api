@@ -28,6 +28,23 @@ spec:
       serviceAccountName: {{ include "webgame-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: {{ .Chart.Name }}-init
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.image }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - /webgame-api
+        args:
+        - --import-initialization-data
+        - --gorm-debug-log-level
+        - --database-address={{ .Values.database.address }}
+        - --database-port={{ .Values.database.port }}
+        - --database-user={{ .Values.database.user }}
+        - --database-password={{ .Values.database.password }}
+        - --logger-level-enabler={{ .Values.log.levelEnabler }}
+        - --v={{ .Values.log.level }}
       containers:
       - name: {{ .Chart.Name }}
         securityContext:

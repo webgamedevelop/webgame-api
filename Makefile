@@ -105,6 +105,16 @@ run-bin: build
 	    --v 2 \
 	    --middleware-inspect-level 2
 
+.PHONY: import-data
+import-data:
+	$(LOCALBIN)/webgame-api \
+	    --import-initialization-data \
+	    --gorm-debug-log-level \
+	    --database-address localhost \
+	    --database-password 123456 \
+	    --logger-level-enabler 0 \
+	    --v 2
+
 # If you wish to build the manager image targeting other platforms you can use the --platform flag.
 # (i.e. docker build --platform linux/arm64). However, you must enable docker buildKit for it.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
@@ -142,7 +152,7 @@ deploy: helm ## Deploy webgame-api component by helm to the K8s cluster specifie
 	    --set log.ginMode="debug" \
 	    --set log.levelEnabler=0 \
 	    --set log.level=2 \
-        --set log.inspectLevel=2 \
+	    --set log.inspectLevel=2 \
 	    --set database.address="mysql.mysql" \
 	    --set database.port="3306" \
 	    --set database.user="root" \
