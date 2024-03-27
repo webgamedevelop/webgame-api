@@ -7,9 +7,9 @@ import (
 
 type GameType struct {
 	gorm.Model
-	Name           string       `gorm:"type:varchar(60);uniqueIndex" binding:"required,max=60" form:"name" json:"name,omitempty"`
-	TypeName       string       `gorm:"type:varchar(60);uniqueIndex" binding:"required,max=60" form:"typeName" json:"typeName,omitempty"`
-	RootDomain     string       `gorm:"type:varchar(200);uniqueIndex" binding:"required,max=200,hostname_rfc1123" form:"rootDomain" json:"rootDomain"`
+	Name           string       `gorm:"type:varchar(60);uniqueIndex;not null" binding:"required,max=60" form:"name" json:"name,omitempty"`
+	TypeName       string       `gorm:"type:varchar(60);uniqueIndex;not null" binding:"required,max=60" form:"typeName" json:"typeName,omitempty"`
+	RootDomain     string       `gorm:"type:varchar(200);uniqueIndex;not null" binding:"required,max=200,hostname_rfc1123" form:"rootDomain" json:"rootDomain"`
 	ResourceSpecID uint         `binding:"required" form:"resourceSpecID" json:"resourceSpecID"`
 	RepositoryID   uint         `binding:"required" form:"repositoryID" json:"repositoryID"`
 	ResourceSpec   ResourceSpec `json:"resourceSpec"`
