@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+	"runtime/debug"
+
 	"gorm.io/gorm"
 )
 
@@ -14,4 +17,43 @@ type ImagePullSecret struct {
 	DockerUsername  string `gorm:"type:varchar(50)" binding:"required,max=50" form:"dockerUsername" json:"dockerUsername,omitempty"`
 	DockerPassword  string `gorm:"type:varchar(100)" binding:"required,max=100" form:"dockerPassword" json:"dockerPassword,omitempty"`
 	DockerEmail     string `gorm:"type:varchar(100)" binding:"email,max=100" form:"dockerEmail" json:"dockerEmail,omitempty"`
+}
+
+func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err error) {
+	tx := db.Begin()
+	// rollback when panic or err
+	defer func() {
+		if r := recover(); r != nil {
+			debug.PrintStack()
+			var ok bool
+			if err, ok = r.(error); !ok {
+				err = fmt.Errorf("panic in transaction: %s", r)
+			}
+			tx.Rollback()
+			return
+		}
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+	}()
+
+	if err = tx.Error; err != nil {
+		return
+	}
+
+	if err = tx.Create(i).Error; err != nil {
+		return
+	}
+
+	if err = fn(); err != nil {
+		return
+	}
+
+	if err = tx.Commit().Error; err != nil {
+		return
+	}
+
+	created = i
+	return
 }

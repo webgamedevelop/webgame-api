@@ -1,12 +1,38 @@
 package v1
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	"github.com/webgamedevelop/webgame-api/internal/models"
+	pkgsecret "github.com/webgamedevelop/webgame-api/pkg/kubernetes/secret"
+)
 
 type Secret struct{}
 
 func (s Secret) Create(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		secret models.ImagePullSecret
+		err    error
+	)
+
+	if err = c.ShouldBindJSON(&secret); err != nil {
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	fn := func() error {
+		return pkgsecret.Create(secret.SecretName, secret.SecretNamespace, secret.DockerServer, secret.DockerUsername, secret.DockerPassword, secret.DockerEmail, false)
+	}
+
+	if _, err = secret.Create(fn); err != nil {
+		badResponse(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	okResponse(c, secret)
+	return
 }
 
 func (s Secret) Update(c *gin.Context) {
