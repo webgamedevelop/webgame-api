@@ -8,7 +8,7 @@ database:
 
 log:
   ginMode: release
-  levelEnabler: 0
+  loggerKlogV: 0
   level: 2
   inspectLevel: 2
 

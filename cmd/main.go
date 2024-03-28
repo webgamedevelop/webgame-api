@@ -79,10 +79,15 @@ func main() {
 	verflag.PrintAndExitIfRequested()
 
 	ctx := ctrl.SetupSignalHandler()
-	setLogger(ctx, ginMode)
+	var err error
+
+	if err = setLogger(ctx, ginMode); err != nil {
+		klog.Error(err)
+		return
+	}
+
 	defer klog.Flush()
 
-	var err error
 	if err = models.Init(); err != nil {
 		klog.Error(err)
 		return
@@ -179,11 +184,15 @@ func main() {
 	klog.Info("the Webgame-API HTTP server has shutdown normally")
 }
 
-func setLogger(ctx context.Context, mode string) {
-	l, flush := logger.New(ctx, logger.DefaultEncoderConfig)
+func setLogger(ctx context.Context, mode string) error {
+	l, flush, err := logger.New(ctx, logger.DefaultEncoderConfig)
+	if err != nil {
+		return err
+	}
 	klog.SetLoggerWithOptions(l, klog.FlushLogger(flush))
 	ctrl.SetLogger(l)
 	gin.SetMode(mode)
 	gin.DefaultWriter = logger.Writer()
 	gin.DefaultErrorWriter = logger.Writer()
+	return nil
 }

@@ -14,7 +14,7 @@ var (
 var commandLine flag.FlagSet
 
 func init() {
-	commandLine.IntVar(&inspectLevel, "middleware-inspect-level", 3, "Middle ware inspect level")
+	commandLine.IntVar(&inspectLevel, "middleware-inspect-level", 2, "Middle ware inspect level")
 	commandLine.StringVar(&cookieName, "middleware-cookie-name", "token", "Cookie name")
 	commandLine.DurationVar(&timeout, "middleware-token-timeout", time.Hour, "Token timeout")
 	commandLine.DurationVar(&maxRefresh, "middleware-token-maxRefresh", time.Hour, "Token max refresh time")

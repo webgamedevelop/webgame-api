@@ -43,8 +43,8 @@ spec:
         - --database-port={{ .Values.database.port }}
         - --database-user={{ .Values.database.user }}
         - --database-password={{ .Values.database.password }}
-        - --logger-level-enabler={{ .Values.log.levelEnabler }}
         - --v={{ .Values.log.level }}
+        - --logger-klog-v={{ .Values.log.loggerKlogV }}
       containers:
       - name: {{ .Chart.Name }}
         securityContext:
@@ -59,8 +59,8 @@ spec:
         - --database-user={{ .Values.database.user }}
         - --database-password={{ .Values.database.password }}
         - --gin-mode={{ .Values.log.ginMode }}
-        - --logger-level-enabler={{ .Values.log.levelEnabler }}
         - --v={{ .Values.log.level }}
+        - --logger-klog-v={{ .Values.log.loggerKlogV }}
         - --middleware-inspect-level={{ .Values.log.inspectLevel }}
         ports:
         - name: http

@@ -91,9 +91,8 @@ run: fmt swagger vet ## Run a webgame-api from your host.
 	    --database-address localhost \
 	    --database-password 123456 \
 	    --gin-mode debug \
-	    --logger-level-enabler 0 \
 	    --v 2 \
-	    --middleware-inspect-level 2
+	    --logger-klog-v 0
 
 .PHONY: run-bin
 run-bin: build
@@ -101,9 +100,8 @@ run-bin: build
 	    --database-address localhost \
 	    --database-password 123456 \
 	    --gin-mode debug \
-	    --logger-level-enabler 0 \
 	    --v 2 \
-	    --middleware-inspect-level 2
+	    --logger-klog-v 0
 
 .PHONY: import-data
 import-data:
@@ -112,8 +110,8 @@ import-data:
 	    --gorm-debug-log-level \
 	    --database-address localhost \
 	    --database-password 123456 \
-	    --logger-level-enabler 0 \
-	    --v 2
+	    --v 2 \
+	    --logger-klog-v 2
 
 # If you wish to build the manager image targeting other platforms you can use the --platform flag.
 # (i.e. docker build --platform linux/arm64). However, you must enable docker buildKit for it.

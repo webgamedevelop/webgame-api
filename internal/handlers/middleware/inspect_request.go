@@ -30,7 +30,7 @@ func InspectRequest() gin.HandlerFunc {
 					}
 				}
 			}
-			klog.V(klog.Level(inspectLevel)).Info("inspect request", "method", c.Request.Method, "uri", c.Request.RequestURI, "body", out.String())
+			klog.V(klog.Level(inspectLevel)).InfoS("inspect request", "method", c.Request.Method, "uri", c.Request.RequestURI, "body", out.String())
 		}
 		c.Next()
 	}
