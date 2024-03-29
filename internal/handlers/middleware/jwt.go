@@ -16,17 +16,19 @@ var IdentityKey = "name"
 // JWT init jwt middleware
 func JWT() (*jwt.GinJWTMiddleware, error) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:         "webgame-api realm",
-		Key:           []byte("webgame-api secret key"),
-		Timeout:       timeout,
-		MaxRefresh:    maxRefresh,
-		IdentityKey:   IdentityKey,
-		TokenLookup:   fmt.Sprintf("header: Authorization, query: %s, cookie: %s", cookieName, cookieName),
-		TokenHeadName: "Bearer",
-		SendCookie:    true,
-		CookieName:    cookieName,
-		CookieMaxAge:  timeout,
-		TimeFunc:      time.Now,
+		Realm:          "webgame-api realm",
+		Key:            []byte("webgame-api secret key"),
+		Timeout:        timeout,
+		MaxRefresh:     maxRefresh,
+		IdentityKey:    IdentityKey,
+		TokenLookup:    fmt.Sprintf("header: Authorization, query: %s, cookie: %s", cookieName, cookieName),
+		TokenHeadName:  "Bearer",
+		SendCookie:     true,
+		CookieName:     cookieName,
+		CookieMaxAge:   timeout,
+		CookieHTTPOnly: cookieHTTPOnly,
+		CookieDomain:   cookieDomain,
+		TimeFunc:       time.Now,
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginUser models.UserLoginRequest
 			if err := c.ShouldBind(&loginUser); err != nil {

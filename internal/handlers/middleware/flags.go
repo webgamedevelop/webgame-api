@@ -6,9 +6,10 @@ import (
 )
 
 var (
-	inspectLevel        int
-	cookieName          string
-	timeout, maxRefresh time.Duration
+	inspectLevel             int
+	cookieName, cookieDomain string
+	cookieHTTPOnly           bool
+	timeout, maxRefresh      time.Duration
 )
 
 var commandLine flag.FlagSet
@@ -16,6 +17,8 @@ var commandLine flag.FlagSet
 func init() {
 	commandLine.IntVar(&inspectLevel, "middleware-inspect-level", 2, "Middle ware inspect level")
 	commandLine.StringVar(&cookieName, "middleware-cookie-name", "token", "Cookie name")
+	commandLine.StringVar(&cookieDomain, "middleware-cookie-domain", "", "Cookie domain")
+	commandLine.BoolVar(&cookieHTTPOnly, "middleware-cookie-HTTPOnly", true, "Cookie HTTPOnly")
 	commandLine.DurationVar(&timeout, "middleware-token-timeout", time.Hour, "Token timeout")
 	commandLine.DurationVar(&maxRefresh, "middleware-token-maxRefresh", time.Hour, "Token max refresh time")
 }
