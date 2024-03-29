@@ -28,4 +28,5 @@ type Resource interface {
 	List(c *gin.Context)
 	Detail(c *gin.Context)
 	Delete(c *gin.Context)
+	Sync(c *gin.Context)
 }

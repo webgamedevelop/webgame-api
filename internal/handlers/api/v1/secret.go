@@ -71,3 +71,8 @@ func (s Secret) Delete(c *gin.Context) {
 	// TODO implement me
 	panic("implement me")
 }
+
+func (s Secret) Sync(c *gin.Context) {
+	// TODO implement me
+	panic("implement me")
+}
