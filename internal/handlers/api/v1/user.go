@@ -137,8 +137,7 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 			return
 		}
 
-		response := Response(&simpleResponse{}, Code(http.StatusOK), &ResponseExtend{Data: user})
-		c.JSON(http.StatusOK, response)
+		okResponse(c, user)
 		return
 	}
 }
