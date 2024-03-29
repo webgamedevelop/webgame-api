@@ -16,6 +16,6 @@ func badResponse(c *gin.Context, code int, err ...error) {
 }
 
 func okResponse(c *gin.Context, data any) {
-	response := Response(&simpleResponse{}, Code(http.StatusOK), &ResponseExtend{Data: data})
+	response := Response(&simpleResponse{}, Code(http.StatusOK), Message("success"), &ResponseExtend{Data: data})
 	c.JSON(http.StatusOK, response)
 }
