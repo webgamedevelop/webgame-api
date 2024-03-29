@@ -128,7 +128,7 @@ definitions:
     properties:
       code:
         type: integer
-      extend: {}
+      data: {}
       message:
         type: string
     type: object

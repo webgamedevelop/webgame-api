@@ -446,7 +446,7 @@ const docTemplate = `{
                 "code": {
                     "type": "integer"
                 },
-                "extend": {},
+                "data": {},
                 "message": {
                     "type": "string"
                 }
