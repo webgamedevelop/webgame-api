@@ -1,7 +1,7 @@
 package v1
 
 type ResponseExtend struct {
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 func (e *ResponseExtend) ApplyToResponse(r Responser) {
