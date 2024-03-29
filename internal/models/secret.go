@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"runtime/debug"
 
@@ -24,11 +25,12 @@ func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err
 	// rollback when panic or err
 	defer func() {
 		if r := recover(); r != nil {
-			debug.PrintStack()
+			stack := debug.Stack()
 			var ok bool
 			if err, ok = r.(error); !ok {
 				err = fmt.Errorf("panic in transaction: %s", r)
 			}
+			err = errors.Join(err, fmt.Errorf("stack: \n%s\n", stack))
 			tx.Rollback()
 			return
 		}
