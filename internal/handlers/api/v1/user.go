@@ -38,9 +38,8 @@ type User struct{}
 //	@Router			/user/signup [post]
 func (*User) SignUp(c *gin.Context) {
 	var (
-		user    models.User
-		created *models.User
-		err     error
+		user models.User
+		err  error
 	)
 
 	if err = c.ShouldBindJSON(&user); err != nil {
@@ -48,12 +47,12 @@ func (*User) SignUp(c *gin.Context) {
 		return
 	}
 
-	if created, err = models.CreateUser(&user); err != nil {
+	if _, err = models.CreateUser(&user); err != nil {
 		badResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
-	okResponse(c, created)
+	okResponse(c, user)
 	return
 }
 
