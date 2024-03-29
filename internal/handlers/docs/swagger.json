@@ -13,6 +13,49 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
+        "/secret/create": {
+            "post": {
+                "description": "create image pull secret",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "secret"
+                ],
+                "summary": "create image pull secret",
+                "parameters": [
+                    {
+                        "description": "secret creation request",
+                        "name": "secret",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ImagePullSecret"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ImagePullSecret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/password": {
             "post": {
                 "description": "change password",
@@ -218,6 +261,73 @@
         }
     },
     "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.ImagePullSecret": {
+            "type": "object",
+            "required": [
+                "dockerPassword",
+                "dockerServer",
+                "dockerUsername",
+                "name",
+                "secretName",
+                "secretNamespace"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "dockerEmail": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "dockerPassword": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "dockerServer": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "dockerUsername": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "secretName": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                },
+                "secretNamespace": {
+                    "type": "string",
+                    "maxLength": 60,
+                    "minLength": 3
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "required": [

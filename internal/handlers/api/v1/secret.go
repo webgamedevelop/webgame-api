@@ -14,6 +14,17 @@ import (
 
 type Secret struct{}
 
+// Create image pull secret
+//
+//	@Tags			secret
+//	@Summary		create image pull secret
+//	@Description	create image pull secret
+//	@Param			secret	body	models.ImagePullSecret	true	"secret creation request"
+//	@Produce		json
+//	@Success		200	{object}	models.ImagePullSecret
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/secret/create [post]
 func (s Secret) Create(c *gin.Context) {
 	var (
 		secret models.ImagePullSecret

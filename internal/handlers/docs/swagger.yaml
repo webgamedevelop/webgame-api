@@ -1,5 +1,54 @@
 basePath: /api/v1
 definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.ImagePullSecret:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dockerEmail:
+        maxLength: 100
+        type: string
+      dockerPassword:
+        maxLength: 100
+        type: string
+      dockerServer:
+        maxLength: 100
+        type: string
+      dockerUsername:
+        maxLength: 50
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 50
+        type: string
+      secretName:
+        maxLength: 100
+        minLength: 3
+        type: string
+      secretNamespace:
+        maxLength: 60
+        minLength: 3
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - dockerPassword
+    - dockerServer
+    - dockerUsername
+    - name
+    - secretName
+    - secretNamespace
+    type: object
   models.User:
     properties:
       confirmPassword:
@@ -93,6 +142,34 @@ info:
   title: webgame-api
   version: v1
 paths:
+  /secret/create:
+    post:
+      description: create image pull secret
+      parameters:
+      - description: secret creation request
+        in: body
+        name: secret
+        required: true
+        schema:
+          $ref: '#/definitions/models.ImagePullSecret'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ImagePullSecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: create image pull secret
+      tags:
+      - secret
   /user/password:
     post:
       description: change password
