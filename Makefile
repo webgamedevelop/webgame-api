@@ -90,6 +90,7 @@ run: fmt swagger vet ## Run a webgame-api from your host.
 	go run ./cmd/main.go \
 	    --database-address localhost \
 	    --database-password 123456 \
+	    --enable-swag true \
 	    --gin-mode debug \
 	    --v 2 \
 	    --logger-klog-v 0
@@ -99,6 +100,7 @@ run-bin: build
 	$(LOCALBIN)/webgame-api \
 	    --database-address localhost \
 	    --database-password 123456 \
+	    --enable-swag true \
 	    --gin-mode debug \
 	    --v 2 \
 	    --logger-klog-v 0

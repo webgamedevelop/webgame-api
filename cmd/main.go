@@ -50,16 +50,17 @@ func init() {
 func main() {
 	var (
 		apiAddr, swagHost, ginMode, adminEmail, adminPhone, adminPassword string
-		importData                                                        bool
+		importData, enableSwag                                            bool
 	)
 
 	pflag.StringVar(&apiAddr, "api-bind-address", ":8080", "The address the api endpoint binds to.")
+	pflag.BoolVar(&enableSwag, "enable-swag", false, "Enable swagger.")
 	pflag.StringVar(&swagHost, "swag-host", "localhost:8080", "Swagger host.")
-	pflag.StringVar(&ginMode, "gin-mode", "release", "Gin mode, debug, release or test")
-	pflag.StringVar(&adminEmail, "init-admin-email", "18600001111@139.com", "Initial email for the admin user")
-	pflag.StringVar(&adminPhone, "init-admin-phone", "18600001111", "Initial phone number for the admin user")
-	pflag.StringVar(&adminPassword, "init-admin-password", "admin12345", "Initial password for the admin user")
-	pflag.BoolVar(&importData, "import-initialization-data", false, "Import initialization data, and exit")
+	pflag.StringVar(&ginMode, "gin-mode", "release", "Gin mode, debug, release or test.")
+	pflag.StringVar(&adminEmail, "init-admin-email", "18600001111@139.com", "Initial email for the admin user.")
+	pflag.StringVar(&adminPhone, "init-admin-phone", "18600001111", "Initial phone number for the admin user.")
+	pflag.StringVar(&adminPassword, "init-admin-password", "admin12345", "Initial password for the admin user.")
+	pflag.BoolVar(&importData, "import-initialization-data", false, "Import initialization data, and exit.")
 
 	var versionFlag pflag.FlagSet
 	verflag.AddFlags(&versionFlag)
@@ -135,8 +136,10 @@ func main() {
 	router.NoRoute(jwtMiddleware.MiddlewareFunc(), middleware.RouteNotFound)
 	router.NoMethod(jwtMiddleware.MiddlewareFunc(), middleware.MethodNotAllowed)
 
-	docs.SwaggerInfo.Host = swagHost
-	router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
+	if enableSwag {
+		docs.SwaggerInfo.Host = swagHost
+		router.GET("/swagger/*any", ginswagger.WrapHandler(swaggofiles.Handler))
+	}
 
 	// add metrics and healthz handlers
 	router.GET("/metrics", metrics.Metrics)
