@@ -1,11 +1,14 @@
 package v1
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"k8s.io/klog/v2"
 
 	"github.com/webgamedevelop/webgame-api/internal/models"
+	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
 	pkgsecret "github.com/webgamedevelop/webgame-api/pkg/kubernetes/secret"
 )
 
@@ -23,7 +26,21 @@ func (s Secret) Create(c *gin.Context) {
 	}
 
 	fn := func() error {
-		return pkgsecret.Create(secret.SecretName, secret.SecretNamespace, secret.DockerServer, secret.DockerUsername, secret.DockerPassword, secret.DockerEmail, false)
+		result, err := pkgsecret.Create(
+			context.Background(),
+			pkgclient.Client(),
+			secret.SecretName,
+			secret.SecretNamespace,
+			secret.DockerServer,
+			secret.DockerUsername,
+			secret.DockerPassword,
+			secret.DockerEmail,
+		)
+		if err != nil {
+			return err
+		}
+		klog.InfoS("create secret", "name", secret.SecretName, "namespace", secret.SecretNamespace, "result", result)
+		return nil
 	}
 
 	if _, err = secret.Create(fn); err != nil {
