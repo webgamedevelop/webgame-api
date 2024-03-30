@@ -59,3 +59,47 @@ func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err
 	created = i
 	return
 }
+
+func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err error) {
+	tx := db.Begin()
+	// rollback when panic or err
+	defer func() {
+		if r := recover(); r != nil {
+			stack := debug.Stack()
+			var ok bool
+			if err, ok = r.(error); !ok {
+				err = fmt.Errorf("panic in transaction: %s", r)
+			}
+			err = errors.Join(err, fmt.Errorf("stack: \n%s\n", stack))
+			tx.Rollback()
+			return
+		}
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+	}()
+
+	if err = tx.Error; err != nil {
+		return
+	}
+
+	if err = tx.Set("gorm:query_option", "FOR UPDATE").First(&ImagePullSecret{}, i.ID).Error; err != nil {
+		return
+	}
+
+	if err = tx.Updates(i).Error; err != nil {
+		return
+	}
+
+	if err = fn(); err != nil {
+		return
+	}
+
+	if err = tx.Commit().Error; err != nil {
+		return
+	}
+
+	updated = i
+	return
+}

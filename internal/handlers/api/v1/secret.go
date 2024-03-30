@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -63,9 +64,59 @@ func (s Secret) Create(c *gin.Context) {
 	return
 }
 
+// Update image pull secret
+//
+//	@Tags			secret
+//	@Summary		update image pull secret
+//	@Description	update image pull secret
+//	@Param			secret	body	models.ImagePullSecret	true	"secret update request"
+//	@Produce		json
+//	@Success		200	{object}	models.ImagePullSecret
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/secret/update [post]
 func (s Secret) Update(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		secret models.ImagePullSecret
+		err    error
+	)
+
+	if err = c.ShouldBindJSON(&secret); err != nil {
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	if secret.ID == 0 {
+		err = fmt.Errorf("secret ID not set")
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	fn := func() error {
+		result, err := pkgsecret.Create(
+			context.Background(),
+			pkgclient.Client(),
+			secret.SecretName,
+			secret.SecretNamespace,
+			secret.DockerServer,
+			secret.DockerUsername,
+			secret.DockerPassword,
+			secret.DockerEmail,
+		)
+		if err != nil {
+			return err
+		}
+		klog.InfoS("update secret", "name", secret.SecretName, "namespace", secret.SecretNamespace, "result", result)
+		return nil
+	}
+
+	if _, err = secret.Update(fn); err != nil {
+		badResponse(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	okResponse(c, secret)
+	return
 }
 
 func (s Secret) List(c *gin.Context) {
