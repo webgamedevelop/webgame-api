@@ -62,6 +62,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/secret/detail": {
+            "get": {
+                "description": "details of the secret",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "secret"
+                ],
+                "summary": "details of the secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "secret id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ImagePullSecret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/secret/update": {
             "post": {
                 "description": "update image pull secret",

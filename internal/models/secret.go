@@ -103,3 +103,12 @@ func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err
 	updated = i
 	return
 }
+
+func (i *ImagePullSecret) Detail() (detail *ImagePullSecret, err error) {
+	if err = db.First(i, i.ID).Error; err != nil {
+		return
+	}
+
+	detail = i
+	return
+}

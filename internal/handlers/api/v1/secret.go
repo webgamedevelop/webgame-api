@@ -124,9 +124,39 @@ func (s Secret) List(c *gin.Context) {
 	panic("implement me")
 }
 
+// Detail returns the details of the secret
+//
+//	@Tags			secret
+//	@Summary		details of the secret
+//	@Description	details of the secret
+//	@Param			id	query	string	true	"secret id"
+//	@Produce		json
+//	@Success		200	{object}	models.ImagePullSecret
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/secret/detail [get]
 func (s Secret) Detail(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		query = &struct {
+			ID uint `form:"id"`
+		}{}
+		secret models.ImagePullSecret
+		err    error
+	)
+
+	if err = c.ShouldBindQuery(&query); err != nil {
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	secret.ID = query.ID
+	if _, err = secret.Detail(); err != nil {
+		badResponse(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	okResponse(c, secret)
+	return
 }
 
 func (s Secret) Delete(c *gin.Context) {

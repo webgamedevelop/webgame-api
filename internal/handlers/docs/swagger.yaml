@@ -170,6 +170,33 @@ paths:
       summary: create image pull secret
       tags:
       - secret
+  /secret/detail:
+    get:
+      description: details of the secret
+      parameters:
+      - description: secret id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ImagePullSecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: details of the secret
+      tags:
+      - secret
   /secret/update:
     post:
       description: update image pull secret
