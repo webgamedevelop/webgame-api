@@ -124,6 +124,37 @@ definitions:
       token:
         type: string
     type: object
+  v1.detailResponse-models_ImagePullSecret:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/models.ImagePullSecret'
+      message:
+        type: string
+    type: object
+  v1.detailResponse-models_User:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/models.User'
+      message:
+        type: string
+    type: object
+  v1.listResponse-array_models_ImagePullSecret-models_ImagePullSecret:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/models.ImagePullSecret'
+        type: array
+      len:
+        type: integer
+      message:
+        type: string
+    type: object
   v1.simpleResponse:
     properties:
       code:
@@ -158,7 +189,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ImagePullSecret'
+            $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
           schema:
@@ -185,7 +216,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ImagePullSecret'
+            $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
           schema:
@@ -195,6 +226,47 @@ paths:
           schema:
             $ref: '#/definitions/v1.simpleResponse'
       summary: details of the secret
+      tags:
+      - secret
+  /secret/list:
+    get:
+      description: list of the secret
+      parameters:
+      - description: column name to order by
+        in: query
+        name: column
+        type: string
+      - in: query
+        name: desc
+        type: boolean
+      - description: page
+        in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        minimum: 1
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.listResponse-array_models_ImagePullSecret-models_ImagePullSecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: list of the secret
       tags:
       - secret
   /secret/update:
@@ -213,7 +285,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ImagePullSecret'
+            $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
           schema:
@@ -317,7 +389,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/v1.detailResponse-models_User'
         "400":
           description: Bad Request
           schema:
@@ -345,7 +417,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/v1.detailResponse-models_User'
         "400":
           description: Bad Request
           schema:

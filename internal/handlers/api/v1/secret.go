@@ -22,7 +22,7 @@ type Secret struct{}
 //	@Description	create image pull secret
 //	@Param			secret	body	models.ImagePullSecret	true	"secret creation request"
 //	@Produce		json
-//	@Success		200	{object}	models.ImagePullSecret
+//	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/create [post]
@@ -60,7 +60,7 @@ func (s Secret) Create(c *gin.Context) {
 		return
 	}
 
-	okResponse(c, secret)
+	DetailResponse(c, secret)
 	return
 }
 
@@ -71,7 +71,7 @@ func (s Secret) Create(c *gin.Context) {
 //	@Description	update image pull secret
 //	@Param			secret	body	models.ImagePullSecret	true	"secret update request"
 //	@Produce		json
-//	@Success		200	{object}	models.ImagePullSecret
+//	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/update [post]
@@ -115,13 +115,40 @@ func (s Secret) Update(c *gin.Context) {
 		return
 	}
 
-	okResponse(c, secret)
+	DetailResponse(c, secret)
 	return
 }
 
+// List returns a list of secret
+//
+//	@Tags			secret
+//	@Summary		list of the secret
+//	@Description	list of the secret
+//	@Param			id	query	models.Paginator	true	"secret list request"
+//	@Produce		json
+//	@Success		200	{object}	listResponse[[]models.ImagePullSecret, models.ImagePullSecret]
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/secret/list [get]
 func (s Secret) List(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		paginator models.Paginator
+		secrets   []models.ImagePullSecret
+		err       error
+	)
+
+	if err = c.ShouldBindQuery(&paginator); err != nil {
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	if err := models.List(&secrets, &paginator, nil); err != nil {
+		badResponse(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	ListResponse(c, secrets)
+	return
 }
 
 // Detail returns the details of the secret
@@ -131,7 +158,7 @@ func (s Secret) List(c *gin.Context) {
 //	@Description	details of the secret
 //	@Param			id	query	string	true	"secret id"
 //	@Produce		json
-//	@Success		200	{object}	models.ImagePullSecret
+//	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/detail [get]
@@ -155,7 +182,7 @@ func (s Secret) Detail(c *gin.Context) {
 		return
 	}
 
-	okResponse(c, secret)
+	DetailResponse(c, secret)
 	return
 }
 

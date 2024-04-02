@@ -44,3 +44,16 @@ func (r *simpleResponse) SetMessage(message string) {
 func (r *simpleResponse) SetExtend(ext *ResponseExtend) {
 	r.ResponseExtend = ext
 }
+
+type detailResponse[T any] struct {
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"message,omitempty"`
+	Data    T      `json:"data,omitempty"`
+}
+
+type listResponse[T []E, E any] struct {
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"message,omitempty"`
+	Len     int    `json:"len,omitempty"`
+	Data    T      `json:"data,omitempty"`
+}

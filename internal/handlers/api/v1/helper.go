@@ -15,7 +15,21 @@ func badResponse(c *gin.Context, code int, err ...error) {
 	c.JSON(code, response)
 }
 
-func okResponse(c *gin.Context, data any) {
-	response := Response(&simpleResponse{}, Code(http.StatusOK), Message("success"), &ResponseExtend{Data: data})
+func DetailResponse[T any](c *gin.Context, data T) {
+	response := &detailResponse[T]{
+		Code:    http.StatusOK,
+		Message: "success",
+		Data:    data,
+	}
+	c.JSON(http.StatusOK, response)
+}
+
+func ListResponse[T []E, E any](c *gin.Context, data T) {
+	response := &listResponse[T, E]{
+		Code:    http.StatusOK,
+		Message: "success",
+		Len:     len(data),
+		Data:    data,
+	}
 	c.JSON(http.StatusOK, response)
 }

@@ -44,7 +44,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ImagePullSecret"
+                            "$ref": "#/definitions/v1.detailResponse-models_ImagePullSecret"
                         }
                     },
                     "400": {
@@ -85,7 +85,68 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ImagePullSecret"
+                            "$ref": "#/definitions/v1.detailResponse-models_ImagePullSecret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/secret/list": {
+            "get": {
+                "description": "list of the secret",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "secret"
+                ],
+                "summary": "list of the secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "column name to order by",
+                        "name": "column",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.listResponse-array_models_ImagePullSecret-models_ImagePullSecret"
                         }
                     },
                     "400": {
@@ -128,7 +189,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.ImagePullSecret"
+                            "$ref": "#/definitions/v1.detailResponse-models_ImagePullSecret"
                         }
                     },
                     "400": {
@@ -288,7 +349,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/v1.detailResponse-models_User"
                         }
                     },
                     "400": {
@@ -331,7 +392,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/v1.detailResponse-models_User"
                         }
                     },
                     "400": {
@@ -520,6 +581,54 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.detailResponse-models_ImagePullSecret": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/models.ImagePullSecret"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.detailResponse-models_User": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.listResponse-array_models_ImagePullSecret-models_ImagePullSecret": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ImagePullSecret"
+                    }
+                },
+                "len": {
+                    "type": "integer"
+                },
+                "message": {
                     "type": "string"
                 }
             }

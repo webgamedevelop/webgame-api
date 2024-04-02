@@ -32,7 +32,7 @@ type User struct{}
 //	@Description	sign up
 //	@Param			user	body	models.User	true	"sign up request"
 //	@Produce		json
-//	@Success		200	{object}	models.User
+//	@Success		200	{object}	detailResponse[models.User]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/user/signup [post]
@@ -52,7 +52,7 @@ func (*User) SignUp(c *gin.Context) {
 		return
 	}
 
-	okResponse(c, user)
+	DetailResponse(c, user)
 	return
 }
 
@@ -99,7 +99,7 @@ func (*User) SignOut(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 //	@Description	update user info
 //	@Param			user	body	models.UserUpdateRequest	true	"update user info request"
 //	@Produce		json
-//	@Success		200	{object}	models.User
+//	@Success		200	{object}	detailResponse[models.User]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/user/update [post]
@@ -137,7 +137,7 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 			return
 		}
 
-		okResponse(c, user)
+		DetailResponse(c, user)
 		return
 	}
 }
