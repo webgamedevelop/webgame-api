@@ -442,18 +442,22 @@ const docTemplate = `{
                     "$ref": "#/definitions/gorm.DeletedAt"
                 },
                 "dockerEmail": {
+                    "description": "Email for Docker registry",
                     "type": "string",
                     "maxLength": 100
                 },
                 "dockerPassword": {
+                    "description": "Password for Docker registry authentication",
                     "type": "string",
                     "maxLength": 100
                 },
                 "dockerServer": {
+                    "description": "Server location for Docker registry, default https://index.docker.io/v1/",
                     "type": "string",
                     "maxLength": 100
                 },
                 "dockerUsername": {
+                    "description": "Username for Docker registry authentication",
                     "type": "string",
                     "maxLength": 50
                 },
@@ -461,15 +465,18 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "description": "Display name",
                     "type": "string",
                     "maxLength": 50
                 },
                 "secretName": {
+                    "description": "K8S secret resource name",
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 3
                 },
                 "secretNamespace": {
+                    "description": "K8S namespace",
                     "type": "string",
                     "maxLength": 60,
                     "minLength": 3

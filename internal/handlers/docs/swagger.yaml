@@ -15,27 +15,34 @@ definitions:
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
       dockerEmail:
+        description: Email for Docker registry
         maxLength: 100
         type: string
       dockerPassword:
+        description: Password for Docker registry authentication
         maxLength: 100
         type: string
       dockerServer:
+        description: Server location for Docker registry, default https://index.docker.io/v1/
         maxLength: 100
         type: string
       dockerUsername:
+        description: Username for Docker registry authentication
         maxLength: 50
         type: string
       id:
         type: integer
       name:
+        description: Display name
         maxLength: 50
         type: string
       secretName:
+        description: K8S secret resource name
         maxLength: 100
         minLength: 3
         type: string
       secretNamespace:
+        description: K8S namespace
         maxLength: 60
         minLength: 3
         type: string
