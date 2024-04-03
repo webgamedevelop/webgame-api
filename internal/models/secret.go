@@ -11,13 +11,20 @@ import (
 // ImagePullSecret k8s image pull secret
 type ImagePullSecret struct {
 	gorm.Model
-	Name            string `gorm:"type:varchar(60);uniqueIndex;not null" binding:"required,max=50" form:"name" json:"name,omitempty"`
-	SecretName      string `gorm:"type:varchar(100);uniqueIndex:idx_name_namespace,priority:1;not null" binding:"required,hostname_rfc1123,min=3,max=100" form:"secretName" json:"secretName,omitempty"`
+	// Display name
+	Name string `gorm:"type:varchar(60);uniqueIndex;not null" binding:"required,max=50" form:"name" json:"name,omitempty"`
+	// K8S secret resource name
+	SecretName string `gorm:"type:varchar(100);uniqueIndex:idx_name_namespace,priority:1;not null" binding:"required,hostname_rfc1123,min=3,max=100" form:"secretName" json:"secretName,omitempty"`
+	// K8S namespace
 	SecretNamespace string `gorm:"type:varchar(60);uniqueIndex:idx_name_namespace,priority:2;not null" binding:"required,hostname_rfc1123,min=3,max=60" form:"secretNamespace" json:"secretNamespace,omitempty"`
-	DockerServer    string `gorm:"type:varchar(100)" binding:"required,url,max=100" form:"dockerServer" json:"dockerServer,omitempty"`
-	DockerUsername  string `gorm:"type:varchar(50)" binding:"required,max=50" form:"dockerUsername" json:"dockerUsername,omitempty"`
-	DockerPassword  string `gorm:"type:varchar(100)" binding:"required,max=100" form:"dockerPassword" json:"dockerPassword,omitempty"`
-	DockerEmail     string `gorm:"type:varchar(100)" binding:"email,max=100" form:"dockerEmail" json:"dockerEmail,omitempty"`
+	// Server location for Docker registry, default https://index.docker.io/v1/
+	DockerServer string `gorm:"type:varchar(100)" binding:"required,url,max=100" form:"dockerServer" json:"dockerServer,omitempty"`
+	// Username for Docker registry authentication
+	DockerUsername string `gorm:"type:varchar(50)" binding:"required,max=50" form:"dockerUsername" json:"dockerUsername,omitempty"`
+	// Password for Docker registry authentication
+	DockerPassword string `gorm:"type:varchar(100)" binding:"required,max=100" form:"dockerPassword" json:"dockerPassword,omitempty"`
+	// Email for Docker registry
+	DockerEmail string `gorm:"type:varchar(100)" binding:"email,max=100" form:"dockerEmail" json:"dockerEmail,omitempty"`
 }
 
 func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err error) {
