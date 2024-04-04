@@ -184,6 +184,8 @@ info:
 paths:
   /secret/create:
     post:
+      consumes:
+      - application/json
       description: create image pull secret
       parameters:
       - description: secret creation request
@@ -201,6 +203,10 @@ paths:
             $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/v1.simpleResponse'
         "500":
@@ -230,6 +236,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -255,6 +265,10 @@ paths:
             $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/v1.simpleResponse'
         "500":
@@ -299,6 +313,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -308,6 +326,8 @@ paths:
       - secret
   /secret/update:
     post:
+      consumes:
+      - application/json
       description: update image pull secret
       parameters:
       - description: secret update request
@@ -325,6 +345,10 @@ paths:
             $ref: '#/definitions/v1.detailResponse-models_ImagePullSecret'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/v1.simpleResponse'
         "500":
@@ -353,6 +377,10 @@ paths:
             $ref: '#/definitions/v1.LoginFailedResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/v1.simpleResponse'
         "500":
@@ -457,6 +485,10 @@ paths:
             $ref: '#/definitions/v1.detailResponse-models_User'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/v1.simpleResponse'
         "500":

@@ -101,6 +101,7 @@ func (*User) SignOut(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	detailResponse[models.User]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/user/update [post]
 func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
@@ -151,6 +152,7 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	LoginFailedResponse
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/user/password [post]
 func (*User) ChangePassword(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {

@@ -22,10 +22,12 @@ type Secret struct{}
 //	@Tags			secret
 //	@Summary		create image pull secret
 //	@Description	create image pull secret
+//	@Accept			json
 //	@Param			secret	body	models.ImagePullSecret	true	"secret creation request"
 //	@Produce		json
 //	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/create [post]
 func (s Secret) Create(c *gin.Context) {
@@ -71,10 +73,12 @@ func (s Secret) Create(c *gin.Context) {
 //	@Tags			secret
 //	@Summary		update image pull secret
 //	@Description	update image pull secret
+//	@Accept			json
 //	@Param			secret	body	models.ImagePullSecret	true	"secret update request"
 //	@Produce		json
 //	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/update [post]
 func (s Secret) Update(c *gin.Context) {
@@ -130,6 +134,7 @@ func (s Secret) Update(c *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	listResponse[[]models.ImagePullSecret, models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/list [get]
 func (s Secret) List(c *gin.Context) {
@@ -162,6 +167,7 @@ func (s Secret) List(c *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/detail [get]
 func (s Secret) Detail(c *gin.Context) {
@@ -197,6 +203,7 @@ func (s Secret) Detail(c *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
+//	@Failure		401	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
 //	@Router			/secret/delete [delete]
 func (s Secret) Delete(c *gin.Context) {
