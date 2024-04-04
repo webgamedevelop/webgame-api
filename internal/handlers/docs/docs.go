@@ -62,7 +62,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/secret/detail": {
+        "/secret/delete": {
             "get": {
                 "description": "delete a secret",
                 "produces": [
@@ -72,6 +72,47 @@ const docTemplate = `{
                     "secret"
                 ],
                 "summary": "delete a secret",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "secret id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.detailResponse-models_ImagePullSecret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/secret/detail": {
+            "get": {
+                "description": "details of the secret",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "secret"
+                ],
+                "summary": "details of the secret",
                 "parameters": [
                     {
                         "type": "string",
