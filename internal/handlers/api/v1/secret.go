@@ -6,7 +6,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/webgamedevelop/webgame-api/internal/models"
 	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
@@ -186,12 +188,47 @@ func (s Secret) Detail(c *gin.Context) {
 	return
 }
 
+// Delete a secret
+//
+//	@Tags			secret
+//	@Summary		delete a secret
+//	@Description	delete a secret
+//	@Param			id	query	string	true	"secret id"
+//	@Produce		json
+//	@Success		200	{object}	detailResponse[models.ImagePullSecret]
+//	@Failure		400	{object}	simpleResponse
+//	@Failure		500	{object}	simpleResponse
+//	@Router			/secret/detail [get]
 func (s Secret) Delete(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var (
+		query = &struct {
+			ID uint `form:"id"`
+		}{}
+		secret models.ImagePullSecret
+		err    error
+	)
+
+	if err = c.ShouldBindQuery(&query); err != nil {
+		badResponse(c, http.StatusBadRequest, err)
+		return
+	}
+
+	fn := func() error {
+		var resource corev1.Secret
+		resource.SetName(secret.SecretName)
+		resource.SetNamespace(secret.SecretNamespace)
+		return client.IgnoreNotFound(pkgclient.Delete(context.Background(), &resource))
+	}
+
+	if err = models.Delete(query.ID, &secret, fn); err != nil {
+		badResponse(c, http.StatusInternalServerError, err)
+		return
+	}
+
+	DetailResponse(c, &secret)
+	return
 }
 
 func (s Secret) Sync(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	badResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
 }

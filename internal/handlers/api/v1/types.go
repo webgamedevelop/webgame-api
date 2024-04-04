@@ -54,6 +54,6 @@ type detailResponse[T any] struct {
 type listResponse[T []E, E any] struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`
-	Len     int    `json:"len,omitempty"`
-	Data    T      `json:"data,omitempty"`
+	Len     int    `json:"len"`
+	Data    T      `json:"data"`
 }
