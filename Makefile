@@ -96,20 +96,21 @@ run: fmt swagger vet ## Run a webgame-api from your host.
 	    --logger-klog-v 0
 
 .PHONY: run-bin
-run-bin: build
+run-bin: build import-data
 	$(LOCALBIN)/webgame-api \
 	    --database-address localhost \
 	    --database-password 123456 \
 	    --enable-swag true \
 	    --gin-mode debug \
 	    --v 2 \
-	    --logger-klog-v 0
+	    --logger-klog-v 0 \
+	    --gorm-debug
 
-.PHONY: import-data
+.PHONY: build import-data
 import-data:
 	$(LOCALBIN)/webgame-api \
 	    --import-initialization-data \
-	    --gorm-debug-log-level \
+	    --gorm-debug \
 	    --database-address localhost \
 	    --database-password 123456 \
 	    --v 2 \

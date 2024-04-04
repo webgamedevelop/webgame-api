@@ -38,7 +38,7 @@ spec:
         - /webgame-api
         args:
         - --import-initialization-data
-        - --gorm-debug-log-level
+        - --gorm-debug
         - --database-address={{ .Values.database.address }}
         - --database-port={{ .Values.database.port }}
         - --database-user={{ .Values.database.user }}
