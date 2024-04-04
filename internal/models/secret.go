@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"runtime/debug"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -12,7 +13,7 @@ import (
 type ImagePullSecret struct {
 	gorm.Model
 	// Display name
-	Name string `gorm:"type:varchar(60);uniqueIndex;not null" binding:"required,max=50" form:"name" json:"name,omitempty"`
+	Name string `gorm:"type:varchar(60);uniqueIndex:idx_name,priority:1;not null" binding:"required,max=50" form:"name" json:"name,omitempty"`
 	// K8S secret resource name
 	SecretName string `gorm:"type:varchar(100);uniqueIndex:idx_name_namespace,priority:1;not null" binding:"required,hostname_rfc1123,min=3,max=100" form:"secretName" json:"secretName,omitempty"`
 	// K8S namespace
@@ -25,6 +26,15 @@ type ImagePullSecret struct {
 	DockerPassword string `gorm:"type:varchar(100)" binding:"required,max=100" form:"dockerPassword" json:"dockerPassword,omitempty"`
 	// Email for Docker registry
 	DockerEmail string `gorm:"type:varchar(100)" binding:"email,max=100" form:"dockerEmail" json:"dockerEmail,omitempty"`
+	DelAt       int64  `gorm:"uniqueIndex:idx_name_namespace,priority:3;uniqueIndex:idx_name,priority:1;not null"`
+}
+
+func (i *ImagePullSecret) BeforeDelete(tx *gorm.DB) (err error) {
+	i.DelAt = time.Now().UnixMicro()
+	if err = tx.Updates(i).Error; err != nil {
+		return
+	}
+	return
 }
 
 func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err error) {
