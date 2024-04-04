@@ -12,6 +12,8 @@ definitions:
     properties:
       createdAt:
         type: string
+      delAt:
+        type: integer
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
       dockerEmail:
@@ -210,7 +212,7 @@ paths:
       - secret
   /secret/detail:
     get:
-      description: details of the secret
+      description: delete a secret
       parameters:
       - description: secret id
         in: query
@@ -232,7 +234,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.simpleResponse'
-      summary: details of the secret
+      summary: delete a secret
       tags:
       - secret
   /secret/list:
@@ -243,7 +245,8 @@ paths:
         in: query
         name: column
         type: string
-      - in: query
+      - description: desc
+        in: query
         name: desc
         type: boolean
       - description: page

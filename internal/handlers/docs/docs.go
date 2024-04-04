@@ -64,14 +64,14 @@ const docTemplate = `{
         },
         "/secret/detail": {
             "get": {
-                "description": "details of the secret",
+                "description": "delete a secret",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "secret"
                 ],
-                "summary": "details of the secret",
+                "summary": "delete a secret",
                 "parameters": [
                     {
                         "type": "string",
@@ -122,6 +122,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "boolean",
+                        "description": "desc",
                         "name": "desc",
                         "in": "query"
                     },
@@ -437,6 +438,9 @@ const docTemplate = `{
             "properties": {
                 "createdAt": {
                     "type": "string"
+                },
+                "delAt": {
+                    "type": "integer"
                 },
                 "deletedAt": {
                     "$ref": "#/definitions/gorm.DeletedAt"
