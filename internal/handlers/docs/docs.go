@@ -63,7 +63,7 @@ const docTemplate = `{
             }
         },
         "/secret/delete": {
-            "get": {
+            "delete": {
                 "description": "delete a secret",
                 "produces": [
                     "application/json"

@@ -198,7 +198,7 @@ func (s Secret) Detail(c *gin.Context) {
 //	@Success		200	{object}	detailResponse[models.ImagePullSecret]
 //	@Failure		400	{object}	simpleResponse
 //	@Failure		500	{object}	simpleResponse
-//	@Router			/secret/delete [get]
+//	@Router			/secret/delete [delete]
 func (s Secret) Delete(c *gin.Context) {
 	var (
 		query = &struct {
