@@ -142,7 +142,7 @@ func (s Secret) List(c *gin.Context) {
 		return
 	}
 
-	if err := models.List(&secrets, &paginator, nil); err != nil {
+	if err = models.List(&secrets, &paginator, nil); err != nil {
 		badResponse(c, http.StatusInternalServerError, err)
 		return
 	}
