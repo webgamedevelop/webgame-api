@@ -27,7 +27,7 @@ type ImagePullSecret struct {
 	DockerPassword string `gorm:"type:varchar(100)" binding:"required,max=100" form:"dockerPassword" json:"dockerPassword,omitempty"`
 	// Email for Docker registry
 	DockerEmail string `gorm:"type:varchar(100)" binding:"email,max=100" form:"dockerEmail" json:"dockerEmail,omitempty"`
-	DelAt       int64  `gorm:"uniqueIndex:idx_name_namespace,priority:3;uniqueIndex:idx_name,priority:1;not null"`
+	DelAt       int64  `gorm:"uniqueIndex:idx_name_namespace,priority:3;uniqueIndex:idx_name,priority:2;not null"`
 }
 
 func (i *ImagePullSecret) BeforeDelete(tx *gorm.DB) (err error) {
