@@ -13,3 +13,5 @@ func (*Webgame) Delete(c *gin.Context) {}
 func (*Webgame) List(c *gin.Context) {}
 
 func (*Webgame) Update(c *gin.Context) {}
+
+func (*Webgame) Sync(c *gin.Context) {}

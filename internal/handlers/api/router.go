@@ -10,6 +10,8 @@
 package api
 
 import (
+	"strings"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
@@ -25,20 +27,15 @@ func AttachUserAPI(group *gin.RouterGroup, user User, jwtMiddleware *jwt.GinJWTM
 	userAPI.POST("/password", user.ChangePassword(jwtMiddleware))
 }
 
-func AttachSecretAPI(group *gin.RouterGroup, secret Resource) {
-	secretAPI := group.Group("/secret")
-	secretAPI.POST("/create", secret.Create)
-	secretAPI.POST("/update", secret.Update)
-	secretAPI.GET("/list", secret.List)
-	secretAPI.GET("/detail", secret.Detail)
-	secretAPI.DELETE("/delete", secret.Delete)
-}
-
-func AttachWebgameAPI(group *gin.RouterGroup, webgame Webgame) {
-	webgameAPI := group.Group("/webgame")
-	webgameAPI.POST("/create", webgame.Create)
-	webgameAPI.GET("/list", webgame.List)
-	webgameAPI.GET("/detail", webgame.Detail)
-	webgameAPI.POST("/update", webgame.Update)
-	webgameAPI.DELETE("/delete", webgame.Delete)
+func AttachResourceAPI(group *gin.RouterGroup, root string, resource Resource) {
+	if !strings.HasPrefix(root, "/") {
+		panic("root must begin with '/'")
+	}
+	api := group.Group(root)
+	api.POST("/create", resource.Create)
+	api.POST("/update", resource.Update)
+	api.GET("/list", resource.List)
+	api.GET("/detail", resource.Detail)
+	api.DELETE("/delete", resource.Delete)
+	api.GET("/sync", resource.Sync)
 }

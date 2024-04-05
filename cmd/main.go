@@ -155,9 +155,9 @@ func main() {
 	apiRouterV1.Use(jwtMiddleware.MiddlewareFunc())
 	apiRouterV1.Use(middleware.InspectRequest())
 
-	// add webgame api
-	api.AttachSecretAPI(apiRouterV1, &apiv1.Secret{})
-	api.AttachWebgameAPI(apiRouterV1, &apiv1.Webgame{})
+	// add Resources api
+	api.AttachResourceAPI(apiRouterV1, "/secret", &apiv1.Secret{})
+	api.AttachResourceAPI(apiRouterV1, "/webgame", &apiv1.Webgame{})
 
 	srv := http.Server{
 		Addr:    apiAddr,
