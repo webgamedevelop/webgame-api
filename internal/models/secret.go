@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // ImagePullSecret k8s image pull secret
@@ -101,7 +102,7 @@ func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err
 		return
 	}
 
-	if err = tx.Set("gorm:query_option", "FOR UPDATE").First(&ImagePullSecret{}, i.ID).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ImagePullSecret{}, i.ID).Error; err != nil {
 		return
 	}
 

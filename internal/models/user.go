@@ -170,7 +170,7 @@ func UpdateUser(request *UserUpdateRequest) (*User, error) {
 		return nil, err
 	}
 
-	if err = tx.Set("gorm:query_option", "FOR UPDATE").First(&user, &User{Name: request.Name}).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&user, &User{Name: request.Name}).Error; err != nil {
 		return nil, err
 	}
 
@@ -218,7 +218,7 @@ func ChangePassword(request *UserChangePasswordRequest) (*User, error) {
 		return nil, err
 	}
 
-	if err = tx.Set("gorm:query_option", "FOR UPDATE").First(&user, &User{Name: request.Name}).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&user, &User{Name: request.Name}).Error; err != nil {
 		return nil, err
 	}
 

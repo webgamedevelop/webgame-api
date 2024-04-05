@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"runtime/debug"
+
+	"gorm.io/gorm/clause"
 )
 
 func Delete(id uint, dest any, fn func() error) (err error) {
@@ -30,7 +32,7 @@ func Delete(id uint, dest any, fn func() error) (err error) {
 		return
 	}
 
-	if err = tx.Set("gorm:query_option", "FOR UPDATE").First(dest, id).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(dest, id).Error; err != nil {
 		return
 	}
 
