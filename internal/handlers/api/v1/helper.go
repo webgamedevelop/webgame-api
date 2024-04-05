@@ -11,7 +11,7 @@ import (
 func badResponse(c *gin.Context, code int, err ...error) {
 	errs := errors.Join(err...)
 	klog.Error(errs)
-	response := Response(&simpleResponse{}, Code(code), Message(errs.Error()))
+	response := SimpleResponse(&simpleResponse{}, Code(code), Message(errs.Error()))
 	c.JSON(code, response)
 }
 

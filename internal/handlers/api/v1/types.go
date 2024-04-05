@@ -12,15 +12,7 @@ func (o Message) ApplyToResponse(r Responser) {
 	r.SetMessage(string(o))
 }
 
-type ResponseExtend struct {
-	Data interface{} `json:"data,omitempty"`
-}
-
-func (e *ResponseExtend) ApplyToResponse(r Responser) {
-	r.SetExtend(e)
-}
-
-func Response(r Responser, opts ...Option) Responser {
+func SimpleResponse(r Responser, opts ...Option) Responser {
 	for _, opt := range opts {
 		opt.ApplyToResponse(r)
 	}
@@ -28,9 +20,8 @@ func Response(r Responser, opts ...Option) Responser {
 }
 
 type simpleResponse struct {
-	Code            int    `json:"code,omitempty"`
-	Message         string `json:"message,omitempty"`
-	*ResponseExtend `json:",inline,omitempty"`
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"message,omitempty"`
 }
 
 func (r *simpleResponse) SetCode(code int) {
@@ -39,10 +30,6 @@ func (r *simpleResponse) SetCode(code int) {
 
 func (r *simpleResponse) SetMessage(message string) {
 	r.Message = message
-}
-
-func (r *simpleResponse) SetExtend(ext *ResponseExtend) {
-	r.ResponseExtend = ext
 }
 
 type detailResponse[T any] struct {

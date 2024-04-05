@@ -168,7 +168,6 @@ definitions:
     properties:
       code:
         type: integer
-      data: {}
       message:
         type: string
     type: object
