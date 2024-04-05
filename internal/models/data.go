@@ -10,6 +10,7 @@ var (
 		{
 			Name:      "nginx-ingress",
 			ClassName: "nginx",
+			Imported:  true,
 		},
 	}
 	ResourceSpecs = []*ResourceSpec{

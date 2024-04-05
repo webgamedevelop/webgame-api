@@ -2,13 +2,6 @@ package models
 
 import "gorm.io/gorm"
 
-// IngressClass k8s ingress class
-type IngressClass struct {
-	gorm.Model
-	Name      string `gorm:"type:varchar(50);uniqueIndex;not null" binding:"required,max=50" form:"name" json:"name,omitempty"`
-	ClassName string `gorm:"type:varchar(20);not null" binding:"required,max=20" form:"className" json:"className,omitempty"`
-}
-
 // ResourceSpec k8s resource spec
 type ResourceSpec struct {
 	gorm.Model
