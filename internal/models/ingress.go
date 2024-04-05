@@ -21,7 +21,7 @@ type IngressClass struct {
 
 func (i *IngressClass) BeforeDelete(tx *gorm.DB) (err error) {
 	if i.Imported {
-		return fmt.Errorf("cat not delete imported ingress %s, className: %s", i.Name, i.ClassName)
+		return fmt.Errorf("cat not delete imported ingress class, name: %s, className: %s", i.Name, i.ClassName)
 	}
 	i.DelAt = time.Now().UnixMicro()
 	if err = tx.Updates(i).Error; err != nil {
