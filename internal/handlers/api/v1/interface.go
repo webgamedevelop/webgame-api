@@ -8,3 +8,10 @@ type Responser interface {
 type Option interface {
 	ApplyToResponse(r Responser)
 }
+
+func SimpleResponse(r Responser, opts ...Option) Responser {
+	for _, opt := range opts {
+		opt.ApplyToResponse(r)
+	}
+	return r
+}

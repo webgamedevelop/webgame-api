@@ -12,13 +12,6 @@ func (o Message) ApplyToResponse(r Responser) {
 	r.SetMessage(string(o))
 }
 
-func SimpleResponse(r Responser, opts ...Option) Responser {
-	for _, opt := range opts {
-		opt.ApplyToResponse(r)
-	}
-	return r
-}
-
 type simpleResponse struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`

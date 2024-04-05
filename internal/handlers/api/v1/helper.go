@@ -8,7 +8,7 @@ import (
 	"k8s.io/klog/v2"
 )
 
-func badResponse(c *gin.Context, code int, err ...error) {
+func BadResponse(c *gin.Context, code int, err ...error) {
 	errs := errors.Join(err...)
 	klog.Error(errs)
 	response := SimpleResponse(&simpleResponse{}, Code(code), Message(errs.Error()))

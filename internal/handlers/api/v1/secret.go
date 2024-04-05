@@ -37,7 +37,7 @@ func (s Secret) Create(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindJSON(&secret); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
@@ -60,7 +60,7 @@ func (s Secret) Create(c *gin.Context) {
 	}
 
 	if _, err = secret.Create(fn); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -88,13 +88,13 @@ func (s Secret) Update(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindJSON(&secret); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
 	if secret.ID == 0 {
 		err = fmt.Errorf("secret ID not set")
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
@@ -117,7 +117,7 @@ func (s Secret) Update(c *gin.Context) {
 	}
 
 	if _, err = secret.Update(fn); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -145,12 +145,12 @@ func (s Secret) List(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindQuery(&paginator); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
 	if err = models.List(&secrets, &paginator, nil); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -180,13 +180,13 @@ func (s Secret) Detail(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindQuery(&query); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
 	secret.ID = query.ID
 	if _, err = secret.Detail(); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -216,7 +216,7 @@ func (s Secret) Delete(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindQuery(&query); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
@@ -228,7 +228,7 @@ func (s Secret) Delete(c *gin.Context) {
 	}
 
 	if err = models.Delete(query.ID, &secret, fn); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -237,5 +237,5 @@ func (s Secret) Delete(c *gin.Context) {
 }
 
 func (s Secret) Sync(c *gin.Context) {
-	badResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
+	BadResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
 }

@@ -43,12 +43,12 @@ func (*User) SignUp(c *gin.Context) {
 	)
 
 	if err = c.ShouldBindJSON(&user); err != nil {
-		badResponse(c, http.StatusBadRequest, err)
+		BadResponse(c, http.StatusBadRequest, err)
 		return
 	}
 
 	if _, err = models.CreateUser(&user); err != nil {
-		badResponse(c, http.StatusInternalServerError, err)
+		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -114,27 +114,27 @@ func (*User) Update(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Context) {
 		)
 
 		if err = c.ShouldBindJSON(&request); err != nil {
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		username, ok := jwt.ExtractClaims(c)[identityKey]
 		if !ok {
 			err = fmt.Errorf("key `%s` not found", identityKey)
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		name, ok := username.(string)
 		if !ok {
 			err = fmt.Errorf("type assertion failed")
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		request.Name = name
 		if user, err = models.UpdateUser(&request); err != nil {
-			badResponse(c, http.StatusInternalServerError, err)
+			BadResponse(c, http.StatusInternalServerError, err)
 			return
 		}
 
@@ -164,27 +164,27 @@ func (*User) ChangePassword(jwtMiddleware *jwt.GinJWTMiddleware) func(c *gin.Con
 		)
 
 		if err = c.ShouldBindJSON(&request); err != nil {
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		username, ok := jwt.ExtractClaims(c)[identityKey]
 		if !ok {
 			err = fmt.Errorf("key `%s` not found", identityKey)
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		name, ok := username.(string)
 		if !ok {
 			err = fmt.Errorf("type assertion failed")
-			badResponse(c, http.StatusBadRequest, err)
+			BadResponse(c, http.StatusBadRequest, err)
 			return
 		}
 
 		request.Name = name
 		if _, err = models.ChangePassword(&request); err != nil {
-			badResponse(c, http.StatusInternalServerError, err)
+			BadResponse(c, http.StatusInternalServerError, err)
 			return
 		}
 
