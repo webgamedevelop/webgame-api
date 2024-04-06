@@ -29,3 +29,10 @@ func (i *IngressClass) BeforeDelete(tx *gorm.DB) (err error) {
 	}
 	return
 }
+
+func (i *IngressClass) Detail() (err error) {
+	if err = db.First(i).Error; err != nil {
+		return
+	}
+	return
+}
