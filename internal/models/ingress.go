@@ -16,6 +16,7 @@ type IngressClass struct {
 	ClassName string `gorm:"type:varchar(20);not null" binding:"required,max=20" form:"className" json:"className,omitempty"`
 	// Imported flag
 	Imported bool  `form:"imported" json:"imported,omitempty"`
+	Synced   bool  `form:"synced" json:"synced,omitempty"`
 	DelAt    int64 `gorm:"uniqueIndex:idx_name,priority:2;not null" json:"delAt,omitempty"`
 }
 

@@ -33,5 +33,6 @@ type Instance struct {
 	ResourceSpec      ResourceSpec
 	ImagePullSecrets  datatypes.JSONSlice[corev1.LocalObjectReference] `form:"imagePullSecrets" json:"imagePullSecrets"`
 	Envs              datatypes.JSONSlice[corev1.EnvVar]               `form:"envs" json:"envs"`
+	Synced            bool                                             `form:"synced" json:"synced,omitempty"`
 	Version           optimisticlock.Version
 }
