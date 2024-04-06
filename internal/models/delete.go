@@ -32,7 +32,7 @@ func Delete(id uint, dest any, fn func() error) (err error) {
 		return
 	}
 
-	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(dest, id).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).First(dest, id).Error; err != nil {
 		return
 	}
 

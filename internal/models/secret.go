@@ -102,7 +102,7 @@ func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err
 		return
 	}
 
-	if err = tx.Clauses(clause.Locking{Strength: "UPDATE"}).First(&ImagePullSecret{}, i.ID).Error; err != nil {
+	if err = tx.Clauses(clause.Locking{Strength: clause.LockingStrengthUpdate}).First(&ImagePullSecret{}, i.ID).Error; err != nil {
 		return
 	}
 
