@@ -48,6 +48,8 @@ definitions:
         maxLength: 60
         minLength: 3
         type: string
+      synced:
+        type: boolean
       updatedAt:
         type: string
     required:
@@ -57,6 +59,38 @@ definitions:
     - name
     - secretName
     - secretNamespace
+    type: object
+  models.IngressClass:
+    properties:
+      className:
+        description: |-
+          K8S ingress class resource name
+          Cannot be updated
+        maxLength: 20
+        type: string
+      createdAt:
+        type: string
+      delAt:
+        type: integer
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      imported:
+        description: Imported flag
+        type: boolean
+      name:
+        description: Display name
+        maxLength: 50
+        type: string
+      synced:
+        description: Synced flag
+        type: boolean
+      updatedAt:
+        type: string
+    required:
+    - className
+    - name
     type: object
   models.User:
     properties:
@@ -142,6 +176,15 @@ definitions:
       message:
         type: string
     type: object
+  v1.detailResponse-models_IngressClass:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/models.IngressClass'
+      message:
+        type: string
+    type: object
   v1.detailResponse-models_User:
     properties:
       code:
@@ -158,6 +201,19 @@ definitions:
       data:
         items:
           $ref: '#/definitions/models.ImagePullSecret'
+        type: array
+      len:
+        type: integer
+      message:
+        type: string
+    type: object
+  v1.listResponse-array_models_IngressClass-models_IngressClass:
+    properties:
+      code:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/models.IngressClass'
         type: array
       len:
         type: integer
@@ -181,6 +237,169 @@ info:
   title: webgame-api
   version: v1
 paths:
+  /ingressclass/delete:
+    delete:
+      description: delete a ingress class
+      parameters:
+      - description: ingress class id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.detailResponse-models_IngressClass'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: delete a ingress class
+      tags:
+      - ingressClass
+  /ingressclass/detail:
+    get:
+      description: details of the ingressClass
+      parameters:
+      - description: ingress class id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.detailResponse-models_IngressClass'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: details of the ingressClass
+      tags:
+      - ingressClass
+  /ingressclass/list:
+    get:
+      description: list ingress classes
+      parameters:
+      - description: column name to order by
+        in: query
+        name: column
+        type: string
+      - description: desc
+        in: query
+        name: desc
+        type: boolean
+      - description: page
+        in: query
+        minimum: 1
+        name: page
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        minimum: 1
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.listResponse-array_models_IngressClass-models_IngressClass'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: list ingress classes
+      tags:
+      - ingressClass
+  /ingressclass/syncfrom:
+    get:
+      description: sync ingress class from k8s cluster
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: sync ingress class from k8s cluster
+      tags:
+      - ingressClass
+  /ingressclass/update:
+    post:
+      consumes:
+      - application/json
+      description: update ingress class
+      parameters:
+      - description: ingress class update request
+        in: body
+        name: ingressClass
+        required: true
+        schema:
+          $ref: '#/definitions/models.IngressClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.detailResponse-models_IngressClass'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.simpleResponse'
+      summary: update ingress class
+      tags:
+      - ingressClass
   /secret/create:
     post:
       consumes:

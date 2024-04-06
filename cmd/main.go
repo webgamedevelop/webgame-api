@@ -157,6 +157,7 @@ func main() {
 
 	// add Resources api
 	api.AttachResourceAPI(apiRouterV1, "/secret", &apiv1.Secret{})
+	api.AttachResourceAPI(apiRouterV1, "/ingressclass", &apiv1.IngressClass{})
 	api.AttachResourceAPI(apiRouterV1, "/webgame", &apiv1.Webgame{})
 
 	srv := http.Server{

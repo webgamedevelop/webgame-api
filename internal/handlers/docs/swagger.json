@@ -13,6 +13,252 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
+        "/ingressclass/delete": {
+            "delete": {
+                "description": "delete a ingress class",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingressClass"
+                ],
+                "summary": "delete a ingress class",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ingress class id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.detailResponse-models_IngressClass"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingressclass/detail": {
+            "get": {
+                "description": "details of the ingressClass",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingressClass"
+                ],
+                "summary": "details of the ingressClass",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ingress class id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.detailResponse-models_IngressClass"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingressclass/list": {
+            "get": {
+                "description": "list ingress classes",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingressClass"
+                ],
+                "summary": "list ingress classes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "column name to order by",
+                        "name": "column",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "desc",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.listResponse-array_models_IngressClass-models_IngressClass"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingressclass/syncfrom": {
+            "get": {
+                "description": "sync ingress class from k8s cluster",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingressClass"
+                ],
+                "summary": "sync ingress class from k8s cluster",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingressclass/update": {
+            "post": {
+                "description": "update ingress class",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ingressClass"
+                ],
+                "summary": "update ingress class",
+                "parameters": [
+                    {
+                        "description": "ingress class update request",
+                        "name": "ingressClass",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.IngressClass"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.detailResponse-models_IngressClass"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.simpleResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/secret/create": {
             "post": {
                 "description": "create image pull secret",
@@ -568,6 +814,51 @@
                     "maxLength": 60,
                     "minLength": 3
                 },
+                "synced": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.IngressClass": {
+            "type": "object",
+            "required": [
+                "className",
+                "name"
+            ],
+            "properties": {
+                "className": {
+                    "description": "K8S ingress class resource name\nCannot be updated",
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "delAt": {
+                    "type": "integer"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "imported": {
+                    "description": "Imported flag",
+                    "type": "boolean"
+                },
+                "name": {
+                    "description": "Display name",
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "synced": {
+                    "description": "Synced flag",
+                    "type": "boolean"
+                },
                 "updatedAt": {
                     "type": "string"
                 }
@@ -693,6 +984,20 @@
                 }
             }
         },
+        "v1.detailResponse-models_IngressClass": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "$ref": "#/definitions/models.IngressClass"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "v1.detailResponse-models_User": {
             "type": "object",
             "properties": {
@@ -717,6 +1022,26 @@
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.ImagePullSecret"
+                    }
+                },
+                "len": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.listResponse-array_models_IngressClass-models_IngressClass": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.IngressClass"
                     }
                 },
                 "len": {
