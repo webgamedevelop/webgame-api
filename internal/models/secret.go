@@ -38,7 +38,7 @@ func (i *ImagePullSecret) BeforeDelete(tx *gorm.DB) (err error) {
 	return
 }
 
-func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err error) {
+func (i *ImagePullSecret) Create(fn func() error) (err error) {
 	tx := db.Begin()
 	// rollback when panic or err
 	defer func() {
@@ -74,11 +74,10 @@ func (i *ImagePullSecret) Create(fn func() error) (created *ImagePullSecret, err
 		return
 	}
 
-	created = i
 	return
 }
 
-func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err error) {
+func (i *ImagePullSecret) Update(fn func() error) (err error) {
 	tx := db.Begin()
 	// rollback when panic or err
 	defer func() {
@@ -118,15 +117,12 @@ func (i *ImagePullSecret) Update(fn func() error) (updated *ImagePullSecret, err
 		return
 	}
 
-	updated = i
 	return
 }
 
-func (i *ImagePullSecret) Detail() (detail *ImagePullSecret, err error) {
-	if err = db.First(i, i.ID).Error; err != nil {
+func (i *ImagePullSecret) Detail() (err error) {
+	if err = db.First(i).Error; err != nil {
 		return
 	}
-
-	detail = i
 	return
 }

@@ -59,7 +59,7 @@ func (s Secret) Create(c *gin.Context) {
 		return nil
 	}
 
-	if _, err = secret.Create(fn); err != nil {
+	if err = secret.Create(fn); err != nil {
 		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
@@ -116,7 +116,7 @@ func (s Secret) Update(c *gin.Context) {
 		return nil
 	}
 
-	if _, err = secret.Update(fn); err != nil {
+	if err = secret.Update(fn); err != nil {
 		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
@@ -185,7 +185,7 @@ func (s Secret) Detail(c *gin.Context) {
 	}
 
 	secret.ID = query.ID
-	if _, err = secret.Detail(); err != nil {
+	if err = secret.Detail(); err != nil {
 		BadResponse(c, http.StatusInternalServerError, err)
 		return
 	}
@@ -238,4 +238,5 @@ func (s Secret) Delete(c *gin.Context) {
 
 func (s Secret) Sync(c *gin.Context) {
 	BadResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
+	return
 }
