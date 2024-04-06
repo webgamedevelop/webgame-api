@@ -10,10 +10,13 @@ import (
 	"k8s.io/klog/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	"github.com/webgamedevelop/webgame-api/internal/handlers/api"
 	"github.com/webgamedevelop/webgame-api/internal/models"
 	pkgclient "github.com/webgamedevelop/webgame-api/pkg/kubernetes/client"
 	pkgsecret "github.com/webgamedevelop/webgame-api/pkg/kubernetes/secret"
 )
+
+var _ api.Resource = &Secret{}
 
 type Secret struct{}
 
@@ -236,7 +239,12 @@ func (s Secret) Delete(c *gin.Context) {
 	return
 }
 
-func (s Secret) Sync(c *gin.Context) {
+func (s Secret) SyncTo(c *gin.Context) {
+	BadResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
+	return
+}
+
+func (s Secret) SyncFrom(c *gin.Context) {
 	BadResponse(c, http.StatusNotImplemented, fmt.Errorf("not implemented"))
 	return
 }

@@ -14,4 +14,6 @@ func (*Webgame) List(c *gin.Context) {}
 
 func (*Webgame) Update(c *gin.Context) {}
 
-func (*Webgame) Sync(c *gin.Context) {}
+func (*Webgame) SyncTo(c *gin.Context) {}
+
+func (*Webgame) SyncFrom(c *gin.Context) {}

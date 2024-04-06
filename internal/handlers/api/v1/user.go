@@ -7,6 +7,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 
+	"github.com/webgamedevelop/webgame-api/internal/handlers/api"
 	"github.com/webgamedevelop/webgame-api/internal/models"
 )
 
@@ -22,6 +23,8 @@ type LoginFailedResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
+
+var _ api.User = &User{}
 
 type User struct{}
 

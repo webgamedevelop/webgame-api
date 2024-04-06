@@ -37,5 +37,6 @@ func AttachResourceAPI(group *gin.RouterGroup, root string, resource Resource) {
 	api.GET("/list", resource.List)
 	api.GET("/detail", resource.Detail)
 	api.DELETE("/delete", resource.Delete)
-	api.GET("/sync", resource.Sync)
+	api.GET("/syncto", resource.SyncTo)
+	api.GET("/syncfrom", resource.SyncFrom)
 }
