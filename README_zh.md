@@ -1,15 +1,18 @@
 # webgame-api
+
 <p>
   简体中文 |
   <a href="./README.md">Docs</a>
 </p>
 
 ## 组件描述
+
 webgame api 组件
 
 ## 快速入门
 
 ### 外部依赖
+
 - go version v1.20.0+.
 - docker version 17.03+.
 - kubectl version v1.11.3+.
@@ -17,6 +20,7 @@ webgame api 组件
 - mysql version 5.7+
 
 ### 将 webgame-api 部署到集群中
+
 **构建镜像并推送到由 `IMG` 指定的镜像仓库中:**
 
 ```sh
@@ -44,9 +48,10 @@ make deploy
 ```
 
 > **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
-privileges or be logged in as admin.
+> privileges or be logged in as admin.
 
 ### 卸载
+
 **从集群中卸载 webgame-api 组件:**
 
 ```sh

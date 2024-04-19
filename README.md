@@ -1,15 +1,18 @@
 # webgame-api
+
 <p>
   Docs |
   <a href="./README_zh.md">简体中文</a>
 </p>
 
 ## Description
+
 webgame api component
 
 ## Getting Started
 
 ### Prerequisites
+
 - go version v1.20.0+.
 - docker version 17.03+.
 - kubectl version v1.11.3+.
@@ -17,6 +20,7 @@ webgame api component
 - mysql version 5.7+
 
 ### To Deploy on the cluster
+
 **Build and push your image to the location specified by `IMG`:**
 
 ```sh
@@ -44,9 +48,10 @@ make deploy
 ```
 
 > **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
-privileges or be logged in as admin.
+> privileges or be logged in as admin.
 
 ### To Uninstall
+
 **UnDeploy the webgame-api component from the cluster:**
 
 ```sh
